@@ -1,0 +1,2045 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>THE PHYSICS ROOM BY MAYUR SIR - Wave Optics Master Lab</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600;700&family=Inter:wght@400;500;600;700;800;900&display=swap');
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+    .font-mono {
+      font-family: 'Fira Code', monospace;
+    }
+    input[type=range]::-webkit-slider-thumb {
+      appearance: none;
+      height: 18px;
+      width: 18px;
+      border-radius: 50%;
+      background: #facc15;
+      cursor: pointer;
+      box-shadow: 0 0 10px rgba(250, 204, 21, 0.9);
+      border: 2px solid #ffffff;
+      transition: transform 0.1s ease;
+    }
+    input[type=range]::-webkit-slider-thumb:hover {
+      transform: scale(1.15);
+    }
+    ::-webkit-scrollbar {
+      height: 6px;
+      width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0f0521;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #6b21a8;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body class="bg-[#070114] text-white min-h-screen flex flex-col font-sans selection:bg-yellow-400 selection:text-purple-950">
+
+  <!-- Header -->
+  <header class="border-b border-purple-800/80 bg-[#120629]/95 backdrop-blur sticky top-0 z-50 px-4 sm:px-8 py-3 flex flex-wrap items-center justify-between gap-3 shadow-xl shadow-purple-950/60">
+    <div class="flex items-center gap-3">
+      <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-yellow-400 via-amber-300 to-purple-600 flex items-center justify-center shadow-lg shadow-yellow-400/30 text-purple-950 text-2xl font-black">
+        <i class="fa-solid fa-water text-purple-950"></i>
+      </div>
+      <div>
+        <div class="flex items-center gap-2 flex-wrap">
+          <span class="text-xs font-mono font-extrabold uppercase tracking-widest text-yellow-300 bg-yellow-400/15 border border-yellow-400/50 px-2 py-0.5 rounded-md">
+            THE PHYSICS ROOM
+          </span>
+          <span class="text-xs font-bold text-white tracking-wide">
+            BY <span class="text-yellow-400 font-extrabold underline decoration-yellow-400 decoration-2 underline-offset-2">MAYUR SIR</span>
+          </span>
+          <span class="hidden sm:inline-block text-[11px] font-mono text-purple-300 bg-purple-900/60 px-2 py-0.5 rounded-full border border-purple-700/40">
+            30+ Years Physics Excellence
+          </span>
+        </div>
+        <h1 class="text-sm sm:text-base font-bold text-white tracking-tight flex items-center gap-1.5 mt-0.5">
+          <span>Wave Optics: Pure Interference (YDSE) vs. Diffraction Lab</span>
+        </h1>
+      </div>
+    </div>
+
+    <!-- Mode Selector & Share Presets -->
+    <div class="flex items-center gap-2.5">
+      <div class="bg-[#1b0a3c] p-1 rounded-xl border border-purple-700/60 flex items-center text-xs">
+        <button id="viewLabBtn" class="px-3.5 py-1.5 rounded-lg font-bold transition bg-gradient-to-r from-yellow-400 to-amber-400 text-purple-950 shadow-md flex items-center gap-1.5">
+          <i class="fa-solid fa-flask"></i>
+          <span>Interactive Lab</span>
+        </button>
+        <button id="viewQuizBtn" class="px-3.5 py-1.5 rounded-lg font-semibold transition text-purple-200 hover:text-white flex items-center gap-1.5">
+          <i class="fa-solid fa-graduation-cap text-yellow-400"></i>
+          <span>25-Q Master Test</span>
+        </button>
+      </div>
+
+      <button id="shareLinkBtn" class="px-3 py-2 rounded-xl bg-purple-900/80 hover:bg-purple-800 text-yellow-300 border border-yellow-400/50 text-xs font-bold transition flex items-center gap-1.5 shadow">
+        <i class="fa-solid fa-share-nodes text-yellow-400"></i>
+        <span class="hidden sm:inline">Share Preset</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Navigation / Experiment Mode Tabs -->
+  <nav class="bg-[#13072b] border-b border-purple-800/60 px-4 sm:px-8 py-2 overflow-x-auto flex items-center justify-between gap-3 text-xs">
+    <div class="flex items-center gap-2 shrink-0">
+      <span class="text-[11px] font-mono text-purple-300 uppercase tracking-wider font-semibold">Mode:</span>
+      <button class="exp-tab-btn px-3 py-1.5 rounded-lg font-bold transition bg-yellow-400 text-purple-950 shadow-sm" data-exp="ydse">
+        1. Pure YDSE (Equal Width &amp; Equal Brightness)
+      </button>
+      <button class="exp-tab-btn px-3 py-1.5 rounded-lg font-medium transition text-purple-200 bg-purple-950/60 border border-purple-800/50 hover:border-purple-600" data-exp="single_diffraction">
+        2. Single Slit Diffraction (Decaying Width &amp; Intensity)
+      </button>
+      <button class="exp-tab-btn px-3 py-1.5 rounded-lg font-medium transition text-purple-200 bg-purple-950/60 border border-purple-800/50 hover:border-purple-600" data-exp="envelope">
+        3. Double Slit with Diffraction Envelope &amp; Missing Orders
+      </button>
+      <button class="exp-tab-btn px-3 py-1.5 rounded-lg font-medium transition text-purple-200 bg-purple-950/60 border border-purple-800/50 hover:border-purple-600" data-exp="lloyd">
+        4. Lloyd's Mirror (Phase Inversion at Edge)
+      </button>
+    </div>
+
+    <div class="hidden xl:flex items-center gap-3 text-xs font-mono shrink-0">
+      <span class="text-purple-300">&lambda;:</span>
+      <span id="headerWavelengthBadge" class="text-yellow-300 font-bold bg-yellow-400/10 px-2 py-0.5 rounded border border-yellow-400/40">550 nm (Green)</span>
+      <span class="text-purple-300">Fringe Width (&beta;):</span>
+      <span id="headerBetaBadge" class="text-yellow-300 font-bold bg-yellow-400/10 px-2 py-0.5 rounded border border-yellow-400/40">1.10 mm</span>
+    </div>
+  </nav>
+
+  <!-- Main Grid Layout -->
+  <main class="flex-1 max-w-7xl w-full mx-auto p-3 sm:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+
+    <!-- Left / Center: Primary Canvas Viewport and Controls -->
+    <div class="lg:col-span-8 flex flex-col gap-4">
+
+      <!-- Wave Simulation Canvas Viewport -->
+      <div class="relative bg-[#120629] border border-purple-800/80 rounded-2xl overflow-hidden shadow-2xl flex flex-col">
+        
+        <!-- Canvas Status Ribbon -->
+        <div class="px-4 py-2.5 bg-[#1a0a38] border-b border-purple-800/80 flex items-center justify-between text-xs font-mono text-purple-200 flex-wrap gap-2">
+          <div class="flex items-center gap-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-yellow-400 animate-pulse"></span>
+            <span id="simStatusHeading" class="text-white font-extrabold uppercase tracking-wider">YOUNG'S DOUBLE SLIT APPARATUS</span>
+            <span class="text-purple-400/60 hidden sm:inline">&bull;</span>
+            <span id="simSubHeading" class="text-yellow-300 font-semibold hidden sm:inline">PURE INTERFERENCE (EQUAL WIDTH &amp; EQUAL INTENSITY)</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="text-purple-300">Peak Intensity:</span>
+            <span id="centralIntensityDisplay" class="text-yellow-300 font-bold bg-yellow-400/15 px-2.5 py-0.5 rounded-lg border border-yellow-400/50">
+              4.00 I₀ (Uniform Across All Orders)
+            </span>
+          </div>
+        </div>
+
+        <!-- Canvas Container -->
+        <div class="relative w-full aspect-[16/11] min-h-[380px] bg-[#060010] select-none overflow-hidden" id="canvasContainer">
+          <canvas id="simCanvas" class="w-full h-full block cursor-crosshair"></canvas>
+
+          <!-- Interactive Click Probe Banner -->
+          <div id="probeBanner" class="absolute top-3 left-1/2 -translate-x-1/2 bg-purple-950/95 text-yellow-300 border border-yellow-400/70 px-4 py-1.5 rounded-full text-xs font-mono font-bold shadow-2xl transition-all opacity-0 pointer-events-none flex items-center gap-2">
+            <i class="fa-solid fa-magnifying-glass-location text-yellow-400"></i>
+            <span id="probeBannerText">Screen Probe: y = 0.00 mm | Path Difference: 0.00 &lambda;</span>
+          </div>
+        </div>
+
+        <!-- Playback & Toggle Toolbar -->
+        <div class="p-3 bg-[#150730] border-t border-purple-800/80 flex items-center justify-between flex-wrap gap-2">
+          <div class="flex items-center gap-2">
+            <button id="togglePlayBtn" class="px-4 py-2 rounded-xl bg-yellow-400 hover:bg-yellow-300 text-purple-950 font-bold transition text-xs sm:text-sm flex items-center gap-2 shadow-md shadow-yellow-400/20 active:scale-95">
+              <i class="fa-solid fa-pause" id="playIcon"></i>
+              <span id="playText">Pause Waves</span>
+            </button>
+            <button id="resetLabBtn" class="p-2 rounded-xl bg-purple-900/60 hover:bg-purple-800 text-purple-200 border border-purple-700/60 transition text-xs" title="Reset to Standard Parameters">
+              <i class="fa-solid fa-arrow-rotate-left"></i>
+            </button>
+            <button id="snapToBrightBtn" class="px-3 py-2 rounded-xl bg-purple-900/80 hover:bg-purple-800 text-yellow-300 border border-yellow-400/40 text-xs font-bold transition flex items-center gap-1.5 shadow" title="Find 1st Order Fringe">
+              <i class="fa-solid fa-bullseye text-yellow-400"></i>
+              <span>Locate Order n = 1</span>
+            </button>
+          </div>
+
+          <div class="flex items-center gap-3 text-xs">
+            <label class="flex items-center gap-2 cursor-pointer text-purple-200 select-none">
+              <input type="checkbox" id="toggleWavefronts" checked class="rounded bg-purple-950 border-purple-700 text-yellow-400 focus:ring-yellow-400">
+              <span>Huygens Waves</span>
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer text-purple-200 select-none">
+              <input type="checkbox" id="toggleRayTracing" checked class="rounded bg-purple-950 border-purple-700 text-yellow-400 focus:ring-yellow-400">
+              <span>Interfering Rays</span>
+            </label>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Controls Panel Placed Directly Below Simulation -->
+      <div class="bg-[#120629] border border-purple-800/80 rounded-2xl p-5 shadow-xl flex flex-col gap-4">
+        <div class="flex items-center justify-between border-b border-purple-800/80 pb-3">
+          <div class="flex items-center gap-2">
+            <i class="fa-solid fa-sliders text-yellow-400 text-base"></i>
+            <h2 class="text-sm font-bold uppercase tracking-wider text-white">Experimental Controls</h2>
+          </div>
+          <span class="text-[11px] font-mono text-yellow-300 font-semibold" id="modeRuleBadge">YDSE: All fringes equal width &amp; equal intensity!</span>
+        </div>
+
+        <!-- Row 1: Wavelength & Slit Distance d / Width a -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- 1. Monochromatic Incident Wavelength Slider -->
+          <div class="flex flex-col gap-1.5 bg-[#0a0219] p-3 rounded-xl border border-purple-800/60">
+            <div class="flex justify-between text-xs">
+              <span class="text-purple-200 font-semibold">Incident Wavelength (&lambda;)</span>
+              <span id="lambdaDisplay" class="font-mono text-yellow-300 font-bold">550 nm (Green)</span>
+            </div>
+            <div class="relative py-1">
+              <input type="range" id="wavelengthSlider" min="380" max="750" step="1" value="550" class="w-full h-2 rounded-lg appearance-none cursor-pointer" style="background: linear-gradient(to right, #7e22ce 0%, #3b82f6 20%, #06b6d4 35%, #10b981 50%, #eab308 68%, #ef4444 88%, #881337 100%);">
+            </div>
+            <div class="flex justify-between text-[10px] text-purple-300 font-mono">
+              <span>380nm (Violet)</span>
+              <span>480nm (Blue)</span>
+              <span>550nm (Green)</span>
+              <span>650nm (Red)</span>
+              <span>750nm (Deep Red)</span>
+            </div>
+          </div>
+
+          <!-- 2. Slit Separation d / Single Slit Width a Slider -->
+          <div class="flex flex-col gap-1.5 bg-[#0a0219] p-3 rounded-xl border border-purple-800/60" id="slitDistControlBox">
+            <div class="flex justify-between text-xs">
+              <span class="text-purple-200 font-semibold" id="slitParamLabel">Slit Separation (d)</span>
+              <span id="slitDistDisplay" class="font-mono text-yellow-300 font-bold">0.50 mm</span>
+            </div>
+            <div class="py-1">
+              <input type="range" id="slitDistSlider" min="0.15" max="1.50" step="0.01" value="0.50" class="w-full h-2 bg-purple-950 rounded-lg appearance-none cursor-pointer">
+            </div>
+            <div class="flex justify-between text-[10px] text-purple-300 font-mono" id="slitRangeSubtext">
+              <span>0.15 mm (Wider Fringes)</span>
+              <span>0.50 mm</span>
+              <span>1.50 mm (Dense Fringes)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Row 2: Screen Distance D & Diffraction Envelope Slit Width a -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- 3. Screen Distance D (m) -->
+          <div class="flex flex-col gap-1.5 bg-[#0a0219] p-3 rounded-xl border border-purple-800/60">
+            <div class="flex justify-between text-xs">
+              <span class="text-purple-200 font-semibold">Slit-to-Screen Distance (D)</span>
+              <span id="screenDistDisplay" class="font-mono text-yellow-300 font-bold">1.00 m</span>
+            </div>
+            <div class="py-1">
+              <input type="range" id="screenDistSlider" min="0.50" max="2.50" step="0.05" value="1.00" class="w-full h-2 bg-purple-950 rounded-lg appearance-none cursor-pointer">
+            </div>
+            <div class="flex justify-between text-[10px] text-purple-300 font-mono">
+              <span>0.5 m (Compressed Spacing)</span>
+              <span>1.0 m</span>
+              <span>2.5 m (Broad Spacing)</span>
+            </div>
+          </div>
+
+          <!-- 4. Single Slit Width a (For Diffraction Modes) -->
+          <div class="flex flex-col gap-1.5 bg-[#0a0219] p-3 rounded-xl border border-purple-800/60" id="secondaryParamBox">
+            <div class="flex justify-between text-xs">
+              <span class="text-purple-200 font-semibold" id="secondaryParamLabel">Slit Width (a) [Diffraction Envelope]</span>
+              <span id="slitWidthDisplay" class="font-mono text-yellow-300 font-bold">0.10 mm</span>
+            </div>
+            <div class="py-1" id="slitWidthSliderContainer">
+              <input type="range" id="slitWidthSlider" min="0.03" max="0.30" step="0.01" value="0.10" class="w-full h-2 bg-purple-950 rounded-lg appearance-none cursor-pointer">
+            </div>
+            <div class="flex justify-between text-[10px] text-purple-300 font-mono" id="slitWidthSubtext">
+              <span>0.03 mm (Broad Central Max)</span>
+              <span>0.10 mm</span>
+              <span>0.30 mm (Narrow Central Max)</span>
+            </div>
+            <div id="secondaryExtraNote" class="text-[11px] text-yellow-300 font-medium mt-1 leading-snug">
+              In diffraction, central peak width ($2\lambda D / a$) is twice that of secondary maxima!
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Real-Time Metrics & Physics Dashboard -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <div class="bg-[#120629] border border-purple-800/80 rounded-xl p-3 shadow-md">
+          <div class="text-[11px] font-mono text-purple-300 mb-1 flex items-center justify-between">
+            <span id="statTitle1">Fringe Width (&beta;)</span>
+            <i class="fa-solid fa-arrows-left-right-to-line text-yellow-400"></i>
+          </div>
+          <div id="statFringeWidth" class="text-base sm:text-lg font-mono font-bold text-white">1.10 mm</div>
+          <div id="statBetaFormula" class="text-[11px] text-purple-300 truncate">&beta; = &lambda;D / d (Constant)</div>
+        </div>
+
+        <div class="bg-[#120629] border border-purple-800/80 rounded-xl p-3 shadow-md">
+          <div class="text-[11px] font-mono text-purple-300 mb-1 flex items-center justify-between">
+            <span id="statTitle2">Angular Width (&theta;)</span>
+            <i class="fa-solid fa-chart-pie text-cyan-400"></i>
+          </div>
+          <div id="statAngularWidth" class="text-base sm:text-lg font-mono font-bold text-white">1.10 mrad</div>
+          <div id="statAngleDeg" class="text-[11px] text-purple-300 truncate">&theta; = 0.063&deg;</div>
+        </div>
+
+        <div class="bg-[#120629] border border-purple-800/80 rounded-xl p-3 shadow-md">
+          <div class="text-[11px] font-mono text-purple-300 mb-1 flex items-center justify-between">
+            <span>Fringe Intensity Law</span>
+            <i class="fa-solid fa-sun text-yellow-400"></i>
+          </div>
+          <div id="statIntensityLaw" class="text-base sm:text-lg font-mono font-bold text-yellow-300">Uniform 4.00 I₀</div>
+          <div id="statIntensitySub" class="text-[11px] text-purple-300 truncate">Equal Across All Orders</div>
+        </div>
+
+        <div class="bg-[#120629] border border-purple-800/80 rounded-xl p-3 shadow-md">
+          <div class="text-[11px] font-mono text-purple-300 mb-1 flex items-center justify-between">
+            <span>Central vs Secondary</span>
+            <i class="fa-solid fa-scale-balanced text-rose-400"></i>
+          </div>
+          <div id="statComparison" class="text-base sm:text-lg font-mono font-bold text-white">Equal Width &amp; Peak</div>
+          <div id="statRatio" class="text-[11px] text-emerald-400 font-semibold truncate">Ratio = 1 : 1 : 1</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Right Column: Mayur Sir's Notes & Reference Matrix -->
+    <div class="lg:col-span-4 flex flex-col gap-5">
+
+      <!-- Mayur Sir's 30-Year Veteran Teaching Notes Card -->
+      <div class="bg-[#120629] border border-purple-800/80 rounded-2xl p-5 flex flex-col gap-3 shadow-xl">
+        <div class="flex items-center justify-between border-b border-purple-800/80 pb-3">
+          <h3 class="text-xs font-bold uppercase tracking-wider text-yellow-300 font-mono flex items-center gap-2">
+            <i class="fa-solid fa-graduation-cap text-yellow-400 text-sm"></i>
+            Mayur Sir's Wave Notes
+          </h3>
+          <span class="text-[10px] text-purple-300 font-mono bg-purple-900/60 px-2 py-0.5 rounded border border-purple-700/50">30-YR SECRET</span>
+        </div>
+        <div id="teacherNoteContent" class="text-xs sm:text-sm text-purple-100 leading-relaxed space-y-2">
+          <!-- Dynamically populated physics notes -->
+        </div>
+      </div>
+
+      <!-- Comparison Card: Interference vs Diffraction -->
+      <div class="bg-[#120629] border border-purple-800/80 rounded-2xl p-5 shadow-xl flex flex-col gap-3">
+        <div class="flex items-center justify-between border-b border-purple-800/80 pb-3">
+          <h2 class="text-sm font-bold uppercase tracking-wider text-white flex items-center gap-2">
+            <i class="fa-solid fa-code-compare text-yellow-400"></i>
+            Interference vs. Diffraction
+          </h2>
+          <span class="text-[10px] text-purple-300 font-mono">Exam Comparison Law</span>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs text-purple-200">
+            <thead>
+              <tr class="border-b border-purple-800 text-yellow-300 font-bold">
+                <th class="py-1.5 px-1">Feature</th>
+                <th class="py-1.5 px-1">YDSE Interference</th>
+                <th class="py-1.5 px-1">Single Slit Diffraction</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-purple-900/60">
+              <tr>
+                <td class="py-1.5 px-1 font-semibold text-white">Origin</td>
+                <td class="py-1.5 px-1">2 coherent wavelets ($S_1, S_2$)</td>
+                <td class="py-1.5 px-1">Wavelets from continuous slit of width $a$</td>
+              </tr>
+              <tr>
+                <td class="py-1.5 px-1 font-semibold text-white">Fringe Width</td>
+                <td class="py-1.5 px-1 text-emerald-400 font-bold">All fringes EQUAL width ($\beta = \frac{\lambda D}{d}$)</td>
+                <td class="py-1.5 px-1 text-rose-300">Central max is TWICE width ($2\beta_0$) of secondary</td>
+              </tr>
+              <tr>
+                <td class="py-1.5 px-1 font-semibold text-white">Fringe Brightness</td>
+                <td class="py-1.5 px-1 text-emerald-400 font-bold">All bright fringes EQUAL intensity ($4I_0$)</td>
+                <td class="py-1.5 px-1 text-rose-300">Intensity RAPIDLY DECAYS ($1 : \frac{1}{22} : \frac{1}{61}$)</td>
+              </tr>
+              <tr>
+                <td class="py-1.5 px-1 font-semibold text-white">Dark Fringes</td>
+                <td class="py-1.5 px-1">Complete darkness ($I_{\min} = 0$)</td>
+                <td class="py-1.5 px-1">Minima are dark ($a\sin\theta = m\lambda$)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- Quiz Modal View -->
+  <div id="quizModalView" class="fixed inset-0 z-50 bg-[#070114]/95 backdrop-blur-md overflow-y-auto hidden flex flex-col items-center p-3 sm:p-6">
+    <div class="max-w-4xl w-full bg-[#120629] border-2 border-yellow-400/80 rounded-2xl shadow-2xl p-5 sm:p-7 flex flex-col gap-4 relative">
+      <button id="closeQuizModalBtn" class="absolute top-4 right-4 text-purple-300 hover:text-white transition w-9 h-9 rounded-xl bg-purple-900/60 border border-purple-700/60 flex items-center justify-center">
+        <i class="fa-solid fa-xmark text-lg"></i>
+      </button>
+
+      <div class="flex items-center gap-3 border-b border-purple-800/80 pb-4">
+        <div class="w-12 h-12 rounded-2xl bg-yellow-400 text-purple-950 flex items-center justify-center font-black text-2xl shadow-lg shadow-yellow-400/30">
+          <i class="fa-solid fa-graduation-cap"></i>
+        </div>
+        <div>
+          <div class="text-xs font-mono font-bold text-yellow-300 uppercase tracking-widest">THE PHYSICS ROOM BY MAYUR SIR</div>
+          <h2 class="text-lg sm:text-xl font-bold text-white">Wave Optics &amp; Interference 25-Question Master Test</h2>
+          <p class="text-xs text-purple-300">Test your mastery across Equal Fringe Widths, Diffraction Decay, Central Maxima &amp; Stoke's Inversion</p>
+        </div>
+      </div>
+
+      <div id="quizInteractiveArea" class="flex flex-col gap-4">
+        <!-- Rendered dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Share Link Modal -->
+  <div id="shareModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-[#180838] border-2 border-yellow-400/70 rounded-2xl max-w-md w-full p-6 shadow-2xl relative text-white">
+      <button id="closeShareModal" class="absolute top-4 right-4 text-purple-300 hover:text-white transition w-8 h-8 rounded-lg bg-purple-900/50 flex items-center justify-center">
+        <i class="fa-solid fa-xmark text-lg"></i>
+      </button>
+
+      <div class="flex items-center gap-3 mb-3">
+        <div class="w-11 h-11 rounded-xl bg-yellow-400 text-purple-950 flex items-center justify-center font-black text-xl shadow-lg shadow-yellow-400/30">
+          <i class="fa-solid fa-share-nodes"></i>
+        </div>
+        <div>
+          <div class="text-[10px] font-mono font-bold text-yellow-300 uppercase tracking-widest">THE PHYSICS ROOM BY MAYUR SIR</div>
+          <h3 class="text-base font-bold text-white">Share Wave Optics Experiment</h3>
+        </div>
+      </div>
+
+      <p class="text-xs text-purple-200 mt-1 mb-4 leading-relaxed">
+        Share this optical configuration directly with students. Wavelength (&lambda;), slit separation (d), slit width (a), screen distance (D), and selected experiment are preserved!
+      </p>
+
+      <div class="my-3">
+        <label class="text-xs text-yellow-300 font-semibold block mb-1.5 flex items-center gap-1.5">
+          <i class="fa-solid fa-link"></i> Direct URL:
+        </label>
+        <div class="flex items-center gap-2">
+          <input type="text" id="shareUrlInput" readonly class="w-full bg-[#0a0219] border border-purple-700/80 rounded-xl px-3 py-2.5 text-xs text-yellow-300 font-mono select-all focus:outline-none focus:border-yellow-400">
+          <button id="copyShareBtn" class="px-4 py-2.5 bg-yellow-400 hover:bg-yellow-300 text-purple-950 font-extrabold rounded-xl text-xs whitespace-nowrap transition active:scale-95 shadow-md shadow-yellow-400/25 flex items-center gap-1.5 border border-yellow-200">
+            <i class="fa-regular fa-copy"></i>
+            <span>Copy</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toastNotification" class="fixed bottom-6 right-6 bg-yellow-400 text-purple-950 font-extrabold px-5 py-3 rounded-xl shadow-2xl transition-all duration-300 opacity-0 pointer-events-none translate-y-3 z-50 flex items-center gap-2 text-xs border border-white">
+    <i class="fa-solid fa-circle-check text-base"></i>
+    <span id="toastMsg">Preset link copied to clipboard!</span>
+  </div>
+
+  <script>
+    // 25 Master Questions Bank
+    const QUIZ_QUESTIONS = [
+      {
+        id: 1,
+        category: "YDSE Fundamentals",
+        question: "In Young's Double Slit Experiment (YDSE), how do the widths of all bright and dark interference fringes compare across the screen?",
+        options: [
+          "Central fringe is twice as wide as secondary fringes",
+          "All bright and dark fringes have the exact same width: β = λD / d",
+          "Fringe width decreases exponentially away from the center",
+          "Fringe width increases with distance from the center"
+        ],
+        correct: 1,
+        explanation: "In pure YDSE interference, every bright fringe and dark fringe has identical width given by β = λD / d. Unlike diffraction, the central fringe does NOT have double width in pure interference!"
+      },
+      {
+        id: 2,
+        category: "YDSE Fundamentals",
+        question: "How does the intensity of bright fringes vary across the screen in ideal Young's Double Slit interference?",
+        options: [
+          "Intensity rapidly decays away from center",
+          "All bright fringes have identical maximum intensity I_max = 4I₀",
+          "Central fringe has zero intensity",
+          "Higher orders have higher intensity"
+        ],
+        correct: 1,
+        explanation: "In pure YDSE with identical slits, constructive interference everywhere yields A_max = 2a, so I_max = 4I₀. All bright fringes have identical peak brightness across the screen."
+      },
+      {
+        id: 3,
+        category: "Diffraction vs Interference",
+        question: "In single-slit Fraunhofer diffraction of slit width 'a', how does the width of the central maximum compare to secondary maxima?",
+        options: [
+          "It is equal to secondary maxima (β₀ = β)",
+          "It is half the width of secondary maxima",
+          "It is twice as wide as secondary maxima (2λD / a)",
+          "It has zero width"
+        ],
+        correct: 2,
+        explanation: "In single-slit diffraction, the central maximum extends between the first minima on either side at y = +λD/a and y = -λD/a. Hence its width is 2λD/a, which is exactly TWICE the width of secondary maxima (λD/a)."
+      },
+      {
+        id: 4,
+        category: "Diffraction Intensity",
+        question: "In single-slit diffraction, what happens to the intensity of successive secondary maxima?",
+        options: [
+          "They remain completely equal in brightness to the central peak",
+          "They increase in intensity",
+          "They decrease very rapidly: approximately 1 : 1/22 : 1/61 of the central maximum",
+          "They alternate between infinite intensity and zero"
+        ],
+        correct: 2,
+        explanation: "Due to the diffraction factor [sin(β)/β]², the secondary maxima intensities drop sharply to ~4.7% (1st secondary) and ~1.6% (2nd secondary) of the central peak intensity."
+      },
+      {
+        id: 5,
+        category: "Medium Immersion",
+        question: "What happens to the fringe width β in YDSE when the entire apparatus is immersed in water (μ = 1.33)?",
+        options: [
+          "It increases by 33%",
+          "It remains completely unchanged",
+          "It decreases to β / 1.33 because wavelength shrinks to λ' = λ/μ",
+          "Fringes disappear completely"
+        ],
+        correct: 2,
+        explanation: "In water, light speed and wavelength decrease: λ' = λ/μ. Since β = λD/d, the new fringe width is β' = β/μ, compressing all fringes closer together while preserving their equal spacing."
+      },
+      {
+        id: 6,
+        category: "Missing Orders",
+        question: "In a real double-slit experiment, if slit separation d = 4a (where a is slit width), which interference orders (n) will be MISSING?",
+        options: [
+          "n = 1, 2, 3",
+          "n = 4, 8, 12...",
+          "n = 2, 4, 6",
+          "No orders are missing"
+        ],
+        correct: 1,
+        explanation: "Missing orders occur where an interference maximum coincides with a diffraction minimum: d sin θ = nλ and a sin θ = mλ. Dividing gives n = m(d/a) = 4m. For m = 1, 2, 3... orders 4, 8, 12... vanish completely."
+      },
+      {
+        id: 7,
+        category: "Slit Separation",
+        question: "In YDSE, if the slit separation d is halved while keeping wavelength λ and screen distance D constant, the fringe width:",
+        options: [
+          "Halves",
+          "Doubles (2x)",
+          "Quadruples (4x)",
+          "Remains unchanged"
+        ],
+        correct: 1,
+        explanation: "Since β = λD / d, fringe width is inversely proportional to slit separation (β ∝ 1/d). Halving d doubles the fringe width β."
+      },
+      {
+        id: 8,
+        category: "Screen Distance",
+        question: "When screen distance D is increased in YDSE, the angular fringe width θ = β / D:",
+        options: [
+          "Increases linearly with D",
+          "Decreases with 1/D",
+          "Remains completely unchanged (θ = λ / d)",
+          "Becomes zero"
+        ],
+        correct: 2,
+        explanation: "Angular fringe width is θ = β / D = (λD/d) / D = λ / d. It is strictly independent of the distance D to the screen!"
+      },
+      {
+        id: 9,
+        category: "Lloyd's Mirror",
+        question: "In Lloyd's mirror interference experiment, what is the nature of the central boundary fringe touching the mirror surface?",
+        options: [
+          "A bright fringe of maximum intensity 4I₀",
+          "A dark fringe because grazing reflection from a denser medium causes a π phase shift (λ/2 path jump)",
+          "A rainbow of colors",
+          "No light reaches the mirror"
+        ],
+        correct: 1,
+        explanation: "Light reflected from the mirror undergoes a phase change of π (path difference of λ/2) upon reflection from an optically denser medium. Hence at zero geometric path difference, the total effective path difference is λ/2, creating a DARK fringe."
+      },
+      {
+        id: 10,
+        category: "Condition for Interference",
+        question: "Why can't two independent monochromatic light bulbs produce sustained interference fringes on a screen?",
+        options: [
+          "They emit transverse waves rather than longitudinal waves",
+          "Their light travels at different speeds in air",
+          "Light emissions from independent atoms undergo rapid, random phase shifts every ~10⁻⁸ seconds (incoherent)",
+          "Their wavelengths are too short to be observed"
+        ],
+        correct: 2,
+        explanation: "Two independent sources lack a constant phase relationship (coherence). The phase difference δ fluctuates millions of times per second, washing out the pattern to a uniform illumination 2I₀."
+      },
+      {
+        id: 11,
+        category: "Wavelength Comparison",
+        question: "If red light (λ = 700 nm) is replaced by violet light (λ = 400 nm) in YDSE without changing d or D, the fringes become:",
+        options: [
+          "More widely separated",
+          "More closely packed together (β_violet = 4/7 β_red)",
+          "Completely dark",
+          "Rotated by 90°"
+        ],
+        correct: 1,
+        explanation: "Because β = λD / d, fringe width is directly proportional to wavelength (β ∝ λ). Shorter wavelength violet light produces narrower, more tightly packed fringes."
+      },
+      {
+        id: 12,
+        category: "Central Fringe Path Diff",
+        question: "What is the optical path difference between waves reaching the central fringe (y = 0) in standard YDSE?",
+        options: [
+          "Δx = λ / 2",
+          "Δx = 0",
+          "Δx = λ",
+          "Δx = 2λ"
+        ],
+        correct: 1,
+        explanation: "At the screen center y = 0, waves from S₁ and S₂ travel equal geometric distances (S₁O = S₂O). Path difference Δx = 0, giving phase difference δ = 0 and the central bright maximum."
+      },
+      {
+        id: 13,
+        category: "White Light in YDSE",
+        question: "What is observed on the screen when white light is used in YDSE?",
+        options: [
+          "All white fringes across the entire screen",
+          "A white central fringe bordered by colored fringes with violet closest to center and red furthest",
+          "Complete darkness",
+          "Uniform dark fringes"
+        ],
+        correct: 1,
+        explanation: "At the center, path difference is zero for all wavelengths, so all colors combine constructively into white. For higher orders, because β ∝ λ, violet (shortest λ) forms its maximum closest to center, and red forms furthest."
+      },
+      {
+        id: 14,
+        category: "Energy Conservation",
+        question: "How is the law of conservation of energy obeyed in interference?",
+        options: [
+          "Energy is destroyed at dark fringes and created at bright fringes",
+          "Energy is not conserved in wave optics",
+          "Energy is simply redistributed from dark regions (I = 0) to bright regions (I = 4I₀), with average intensity equal to 2I₀",
+          "Energy converts into matter"
+        ],
+        correct: 2,
+        explanation: "Average intensity over one fringe is (4I₀ + 0)/2 = 2I₀, which equals the sum of the separate intensities (I₀ + I₀). Energy is neither created nor destroyed; it is spatially redistributed."
+      },
+      {
+        id: 15,
+        category: "Diffraction Minima Formula",
+        question: "What is the condition for the m-th diffraction minimum in a single slit of width 'a'?",
+        options: [
+          "a sin θ = mλ (m = 1, 2, 3...)",
+          "a sin θ = (2m + 1) λ / 2",
+          "a sin θ = m λ / 2",
+          "a sin θ = 0"
+        ],
+        correct: 0,
+        explanation: "For a single slit of width a, the wavefront can be divided into 2m equal zones that pairwise cancel each other out when a sin θ = mλ for integer m = 1, 2, 3..."
+      },
+      {
+        id: 16,
+        category: "Interference Maxima Formula",
+        question: "What is the condition for the n-th bright fringe (maximum) in double-slit interference with slit separation 'd'?",
+        options: [
+          "d sin θ = (2n - 1) λ / 2",
+          "d sin θ = nλ (n = 0, 1, 2...)",
+          "d sin θ = n λ / 4",
+          "d sin θ = (n + 1) λ"
+        ],
+        correct: 1,
+        explanation: "Constructive interference requires path difference Δx = d sin θ = nλ for integer n = 0, 1, 2, 3..."
+      },
+      {
+        id: 17,
+        category: "Diffraction vs Interference",
+        question: "Which of the following is true regarding contrast between bright and dark fringes in YDSE vs. single-slit diffraction?",
+        options: [
+          "Single-slit diffraction has better contrast because its minima are completely black everywhere",
+          "YDSE has superior, uniform contrast because all bright fringes have equal peak intensity 4I₀ and dark fringes are completely zero",
+          "Both have identical contrast across all orders",
+          "Neither produces dark fringes"
+        ],
+        correct: 1,
+        explanation: "In YDSE, contrast is uniform everywhere ($I_{\\max}=4I_0, I_{\\min}=0$). In diffraction, secondary maxima are so dim that beyond order 2 or 3 they blur into the background."
+      },
+      {
+        id: 18,
+        category: "Fringe Shift",
+        question: "When a thin transparent glass sheet of thickness t and refractive index μ is placed in front of slit S₁ in YDSE, what happens?",
+        options: [
+          "Fringe width β increases",
+          "Fringe width β decreases",
+          "The entire fringe pattern shifts toward S₁ by distance x₀ = D(μ - 1)t / d, while fringe width remains unchanged",
+          "The fringes disappear completely"
+        ],
+        correct: 2,
+        explanation: "The glass plate adds an extra optical path (μ - 1)t to the upper wave. To compensate and restore zero path difference, the central fringe and the entire pattern shift toward S₁ without altering fringe width β."
+      },
+      {
+        id: 19,
+        category: "Dark Fringe Location",
+        question: "In YDSE, what is the distance of the first dark fringe (n = 1) from the central bright fringe?",
+        options: [
+          "y₁ = λD / d",
+          "y₁ = λD / (2d) = β / 2",
+          "y₁ = 2λD / d",
+          "y₁ = 0"
+        ],
+        correct: 1,
+        explanation: "Destructive interference occurs when path difference is λ/2. Thus y₁ * d / D = λ/2, which gives y₁ = λD / (2d) = β / 2."
+      },
+      {
+        id: 20,
+        category: "Huygens' Principle",
+        question: "According to Huygens' principle, each point on a wavefront behaves as:",
+        options: [
+          "A stationary point of zero energy",
+          "A source of secondary spherical wavelets spreading in the forward direction",
+          "A particle moving with infinite speed",
+          "A reflector of light"
+        ],
+        correct: 1,
+        explanation: "Every point on a primary wavefront acts as a source of secondary spherical wavelets that spread out in all forward directions at the speed of the wave in that medium."
+      },
+      {
+        id: 21,
+        category: "Intensity Ratio",
+        question: "If the ratio of amplitudes of two interfering waves is a₁ / a₂ = 3 / 1, what is the ratio of maximum to minimum intensity (I_max / I_min)?",
+        options: [
+          "9 : 1",
+          "4 : 1",
+          "16 : 1",
+          "3 : 1"
+        ],
+        correct: 1,
+        explanation: "I_max = (a₁ + a₂)² = (3 + 1)² = 16. I_min = (a₁ - a₂)² = (3 - 1)² = 4. The ratio is 16 / 4 = 4 : 1."
+      },
+      {
+        id: 22,
+        category: "Coherence",
+        question: "Two sources are defined as coherent if they:",
+        options: [
+          "Emit light of the same intensity only",
+          "Maintain a constant phase difference over time and have the same frequency",
+          "Are separated by a very large distance",
+          "Produce polarized light in perpendicular planes"
+        ],
+        correct: 1,
+        explanation: "Coherence requires two conditions: identical frequency (monochromatic) and a constant, unchanging phase difference over time."
+      },
+      {
+        id: 23,
+        category: "Single Slit Central Max",
+        question: "If slit width 'a' in a single-slit diffraction experiment is doubled, what happens to the width of the central maximum?",
+        options: [
+          "It doubles",
+          "It is halved (2λD / 2a = λD / a)",
+          "It quadruples",
+          "It remains unchanged"
+        ],
+        correct: 1,
+        explanation: "The angular width of the central maximum in diffraction is 2θ = 2λ / a, and linear width is 2λD / a. Doubling the slit width 'a' halves the central maximum width, making it narrower and sharper."
+      },
+      {
+        id: 24,
+        category: "YDSE Slit Width Limit",
+        question: "Why must individual slit widths 'a' in YDSE be comparable to or smaller than the wavelength λ?",
+        options: [
+          "To allow enough diffraction spread so waves from S₁ and S₂ overlap on the screen",
+          "To prevent light from passing through",
+          "To increase the speed of light",
+          "To polarize the light completely"
+        ],
+        correct: 0,
+        explanation: "If slit width a is much larger than λ, light passes through in narrow straight beams without spreading (rectilinear propagation), so waves from S₁ and S₂ cannot overlap to interfere."
+      },
+      {
+        id: 25,
+        category: "Polarization in YDSE",
+        question: "If two polarizers with mutually perpendicular transmission axes are placed in front of slits S₁ and S₂ in YDSE, what is observed on the screen?",
+        options: [
+          "Double the number of fringes",
+          "No interference pattern; a uniform illumination of 2I₀",
+          "Fringes become twice as bright",
+          "A dark screen everywhere"
+        ],
+        correct: 1,
+        explanation: "According to the Fresnel-Arago laws, light waves polarized in mutually perpendicular planes cannot interfere. They combine incoherently to produce uniform intensity 2I₀ without fringes."
+      }
+    ];
+
+    // Core State
+    const state = {
+      running: true,
+      activeExp: 'ydse', // 'ydse', 'single_diffraction', 'envelope', 'lloyd'
+      showWavefronts: true,
+      showRayTracing: true,
+      
+      // Optical Parameters
+      wavelength: 550,    // nm (380 to 750)
+      slitDist: 0.50,     // mm (d) - double slit
+      slitWidth: 0.10,    // mm (a) - single slit / envelope
+      screenDist: 1.00,   // m (D)
+      
+      wavePhase: 0,
+      hoverScreenY: null,
+
+      quiz: {
+        currentIndex: 0,
+        answers: [],
+        score: 0,
+        showScorecard: false
+      }
+    };
+
+    // DOM Bindings
+    const canvas = document.getElementById('simCanvas');
+    const ctx = canvas.getContext('2d');
+    const container = document.getElementById('canvasContainer');
+
+    const togglePlayBtn = document.getElementById('togglePlayBtn');
+    const playIcon = document.getElementById('playIcon');
+    const playText = document.getElementById('playText');
+    const resetLabBtn = document.getElementById('resetLabBtn');
+    const snapToBrightBtn = document.getElementById('snapToBrightBtn');
+    const toggleWavefronts = document.getElementById('toggleWavefronts');
+    const toggleRayTracing = document.getElementById('toggleRayTracing');
+
+    const wavelengthSlider = document.getElementById('wavelengthSlider');
+    const lambdaDisplay = document.getElementById('lambdaDisplay');
+    const slitDistSlider = document.getElementById('slitDistSlider');
+    const slitDistDisplay = document.getElementById('slitDistDisplay');
+    const slitWidthSlider = document.getElementById('slitWidthSlider');
+    const slitWidthDisplay = document.getElementById('slitWidthDisplay');
+    const screenDistSlider = document.getElementById('screenDistSlider');
+    const screenDistDisplay = document.getElementById('screenDistDisplay');
+
+    const slitParamLabel = document.getElementById('slitParamLabel');
+    const slitRangeSubtext = document.getElementById('slitRangeSubtext');
+    const secondaryParamBox = document.getElementById('secondaryParamBox');
+    const modeRuleBadge = document.getElementById('modeRuleBadge');
+
+    const expTabBtns = document.querySelectorAll('.exp-tab-btn');
+
+    const statTitle1 = document.getElementById('statTitle1');
+    const statTitle2 = document.getElementById('statTitle2');
+    const statFringeWidth = document.getElementById('statFringeWidth');
+    const statBetaFormula = document.getElementById('statBetaFormula');
+    const statAngularWidth = document.getElementById('statAngularWidth');
+    const statAngleDeg = document.getElementById('statAngleDeg');
+    const statIntensityLaw = document.getElementById('statIntensityLaw');
+    const statIntensitySub = document.getElementById('statIntensitySub');
+    const statComparison = document.getElementById('statComparison');
+    const statRatio = document.getElementById('statRatio');
+
+    const centralIntensityDisplay = document.getElementById('centralIntensityDisplay');
+    const headerWavelengthBadge = document.getElementById('headerWavelengthBadge');
+    const headerBetaBadge = document.getElementById('headerBetaBadge');
+    const teacherNoteContent = document.getElementById('teacherNoteContent');
+    const probeBanner = document.getElementById('probeBanner');
+    const probeBannerText = document.getElementById('probeBannerText');
+
+    const simStatusHeading = document.getElementById('simStatusHeading');
+    const simSubHeading = document.getElementById('simSubHeading');
+
+    const viewLabBtn = document.getElementById('viewLabBtn');
+    const viewQuizBtn = document.getElementById('viewQuizBtn');
+    const quizModalView = document.getElementById('quizModalView');
+    const closeQuizModalBtn = document.getElementById('closeQuizModalBtn');
+    const quizInteractiveArea = document.getElementById('quizInteractiveArea');
+
+    const shareLinkBtn = document.getElementById('shareLinkBtn');
+    const shareModal = document.getElementById('shareModal');
+    const closeShareModal = document.getElementById('closeShareModal');
+    const shareUrlInput = document.getElementById('shareUrlInput');
+    const copyShareBtn = document.getElementById('copyShareBtn');
+    const toastNotification = document.getElementById('toastNotification');
+    const toastMsg = document.getElementById('toastMsg');
+
+    function showToast(message) {
+      toastMsg.textContent = message;
+      toastNotification.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-3');
+      toastNotification.classList.add('opacity-100', 'translate-y-0');
+      setTimeout(() => {
+        toastNotification.classList.add('opacity-0', 'pointer-events-none', 'translate-y-3');
+        toastNotification.classList.remove('opacity-100', 'translate-y-0');
+      }, 2600);
+    }
+
+    // High DPI Canvas Resizing
+    function resizeCanvas() {
+      const rect = container.getBoundingClientRect();
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = Math.max(300, Math.floor(rect.width * dpr));
+      canvas.height = Math.max(200, Math.floor(rect.height * dpr));
+      ctx.resetTransform();
+      ctx.scale(dpr, dpr);
+    }
+    window.addEventListener('resize', resizeCanvas);
+
+    // Visible spectrum mapping
+    function nmToColor(wavelength) {
+      let r = 0, g = 0, b = 0;
+      let label = "Visible";
+      
+      if (wavelength >= 380 && wavelength < 440) {
+        r = -(wavelength - 440) / (440 - 380);
+        g = 0.0;
+        b = 1.0;
+        label = "Violet";
+      } else if (wavelength >= 440 && wavelength < 490) {
+        r = 0.0;
+        g = (wavelength - 440) / (490 - 440);
+        b = 1.0;
+        label = "Blue";
+      } else if (wavelength >= 490 && wavelength < 510) {
+        r = 0.0;
+        g = 1.0;
+        b = -(wavelength - 510) / (510 - 490);
+        label = "Cyan";
+      } else if (wavelength >= 510 && wavelength < 580) {
+        r = (wavelength - 510) / (580 - 510);
+        g = 1.0;
+        b = 0.0;
+        label = "Green";
+      } else if (wavelength >= 580 && wavelength < 645) {
+        r = 1.0;
+        g = -(wavelength - 645) / (645 - 580);
+        b = 0.0;
+        label = "Yellow / Orange";
+      } else if (wavelength >= 645 && wavelength <= 750) {
+        r = 1.0;
+        g = 0.0;
+        b = 0.0;
+        label = "Red";
+      } else {
+        r = 0.8; g = 0.0; b = 0.0;
+        label = "Deep Red";
+      }
+
+      let factor = 1.0;
+      if (wavelength < 420) factor = 0.4 + 0.6 * (wavelength - 380) / (420 - 380);
+      if (wavelength > 700) factor = 0.4 + 0.6 * (750 - wavelength) / (750 - 700);
+
+      const R = Math.round(r * 255 * factor);
+      const G = Math.round(g * 255 * factor);
+      const B = Math.round(b * 255 * factor);
+
+      return {
+        rgb: `rgb(${R}, ${G}, ${B})`,
+        rgba: (a) => `rgba(${R}, ${G}, ${B}, ${a})`,
+        label: label,
+        r: R, g: G, b: B
+      };
+    }
+
+    // Physical Optics Calculation & Dynamic Telemetry
+    function computeOptics() {
+      const lambda_m = state.wavelength * 1e-9;
+      const d_m = Math.max(0.05, state.slitDist) * 1e-3;
+      const a_m = Math.max(0.01, state.slitWidth) * 1e-3;
+      const D_m = Math.max(0.2, state.screenDist);
+
+      // Pure YDSE fringe width: beta = lambda * D / d
+      const beta_m = (lambda_m * D_m) / d_m;
+      const beta_mm = beta_m * 1e3;
+
+      // Angular width: theta = lambda / d
+      const theta_rad = lambda_m / d_m;
+      const theta_mrad = theta_rad * 1e3;
+      const theta_deg = theta_rad * (180 / Math.PI);
+
+      // Single Slit Central Maximum width: 2 * lambda * D / a
+      const singleCentralWidth_mm = (2 * lambda_m * D_m / a_m) * 1e3;
+      const singleSecondaryWidth_mm = (lambda_m * D_m / a_m) * 1e3;
+
+      updateTelemetryUI(beta_mm, theta_mrad, theta_deg, singleCentralWidth_mm, singleSecondaryWidth_mm);
+    }
+
+    function updateTelemetryUI(beta_mm, theta_mrad, theta_deg, singleCentralWidth_mm, singleSecondaryWidth_mm) {
+      const colorInfo = nmToColor(state.wavelength);
+
+      lambdaDisplay.textContent = `${state.wavelength} nm (${colorInfo.label})`;
+      slitDistDisplay.textContent = `${state.slitDist.toFixed(2)} mm`;
+      slitWidthDisplay.textContent = `${state.slitWidth.toFixed(2)} mm`;
+      screenDistDisplay.textContent = `${state.screenDist.toFixed(2)} m`;
+      headerWavelengthBadge.textContent = `${state.wavelength} nm (${colorInfo.label})`;
+
+      if (state.activeExp === 'ydse') {
+        simStatusHeading.textContent = "YOUNG'S DOUBLE SLIT APPARATUS";
+        simSubHeading.textContent = "PURE INTERFERENCE (EQUAL WIDTH & EQUAL INTENSITY)";
+        centralIntensityDisplay.textContent = "4.00 I₀ (Uniform Across All Orders)";
+        modeRuleBadge.textContent = "YDSE: All fringes equal width & equal intensity!";
+
+        statTitle1.textContent = "Fringe Width (β)";
+        statFringeWidth.textContent = `${beta_mm.toFixed(2)} mm`;
+        statBetaFormula.textContent = "β = λD / d (Constant everywhere)";
+        headerBetaBadge.textContent = `${beta_mm.toFixed(2)} mm`;
+
+        statTitle2.textContent = "Angular Width (θ)";
+        statAngularWidth.textContent = `${theta_mrad.toFixed(2)} mrad`;
+        statAngleDeg.textContent = `θ = ${theta_deg.toFixed(3)}°`;
+
+        statIntensityLaw.textContent = "Uniform 4.00 I₀";
+        statIntensitySub.textContent = "Zero Decay Across Screen";
+
+        statComparison.textContent = "Equal Width & Peak";
+        statRatio.textContent = "Ratio = 1 : 1 : 1";
+
+        teacherNoteContent.innerHTML = `
+          <strong>Mayur Sir's 30-Year Rule for Pure YDSE:</strong><br>
+          &bull; <strong>Equal Widths:</strong> In pure double slit interference, every bright fringe and dark fringe has the <em>exact same width</em>: $\\beta = \\frac{\\lambda D}{d} = \\mathbf{${beta_mm.toFixed(2)}\\text{ mm}}$.<br>
+          &bull; <strong>Equal Brightness:</strong> Every single bright fringe reaches identical peak intensity $I_{\\max} = 4I_0$. There is <strong>no decay</strong> in brightness across the screen.<br>
+          &bull; <strong>Dynamic Scaling:</strong> Increasing $\\lambda$ or $D$ widens all fringes simultaneously on both the screen and the graph. Increasing $d$ compresses them together.
+        `;
+
+        secondaryParamBox.classList.add('opacity-40', 'pointer-events-none');
+        slitParamLabel.textContent = "Slit Separation (d)";
+        slitRangeSubtext.innerHTML = `<span>0.15 mm (Wider Fringes)</span><span>0.50 mm</span><span>1.50 mm (Dense Fringes)</span>`;
+
+      } else if (state.activeExp === 'single_diffraction') {
+        simStatusHeading.textContent = "SINGLE SLIT DIFFRACTION APPARATUS";
+        simSubHeading.textContent = "DECAYING WIDTH & DECAYING INTENSITY";
+        centralIntensityDisplay.textContent = "I₀ → 0.047 I₀ → 0.016 I₀ (Rapid Decay)";
+        modeRuleBadge.textContent = "Diffraction: Central max is double width & secondary peaks decay sharply!";
+
+        statTitle1.textContent = "Central Max Width";
+        statFringeWidth.textContent = `${singleCentralWidth_mm.toFixed(2)} mm`;
+        statBetaFormula.textContent = "2λD / a (Twice secondary width)";
+        headerBetaBadge.textContent = `${singleCentralWidth_mm.toFixed(2)} mm`;
+
+        statTitle2.textContent = "Secondary Max Width";
+        statAngularWidth.textContent = `${singleSecondaryWidth_mm.toFixed(2)} mm`;
+        statAngleDeg.textContent = `β_sec = λD / a`;
+
+        statIntensityLaw.textContent = "Sharp Decay (1 : 1/22 : 1/61)";
+        statIntensitySub.textContent = "Central = 100%, 1st Sec = 4.7%";
+
+        statComparison.textContent = "Central is 2× Wider";
+        statRatio.textContent = `Ratio = 2 : 1 : 1`;
+
+        teacherNoteContent.innerHTML = `
+          <strong>Mayur Sir's Rule for Single Slit Diffraction:</strong><br>
+          &bull; <strong>Unequal Widths:</strong> The central maximum has width $2\\frac{\\lambda D}{a} = \\mathbf{${singleCentralWidth_mm.toFixed(2)}\\text{ mm}}$, which is <strong>twice as wide</strong> as secondary maxima (${singleSecondaryWidth_mm.toFixed(2)} mm).<br>
+          &bull; <strong>Sharp Intensity Decay:</strong> Secondary maxima drop dramatically: $I_1 \\approx 4.7\\%$ of central, $I_2 \\approx 1.6\\%$. Fringes rapidly fade away from the center!
+        `;
+
+        secondaryParamBox.classList.remove('opacity-40', 'pointer-events-none');
+        slitParamLabel.textContent = "Diffraction Slit Width (a)";
+        slitRangeSubtext.innerHTML = `<span>0.03 mm (Broad Central Max)</span><span>0.10 mm</span><span>0.30 mm (Sharp Max)</span>`;
+
+      } else if (state.activeExp === 'envelope') {
+        simStatusHeading.textContent = "DOUBLE SLIT WITH DIFFRACTION ENVELOPE";
+        simSubHeading.textContent = "INTERFERENCE PEAKS MODULATED BY DIFFRACTION";
+        const missingOrder = Math.max(1, Math.round(state.slitDist / state.slitWidth));
+        centralIntensityDisplay.textContent = `Missing Order n = ±${missingOrder}`;
+        modeRuleBadge.textContent = "Envelope: Interference peaks decaying inside diffraction boundaries!";
+
+        statTitle1.textContent = "Interference Width (β)";
+        statFringeWidth.textContent = `${beta_mm.toFixed(2)} mm`;
+        statBetaFormula.textContent = "β = λD / d (Interference spacing)";
+        headerBetaBadge.textContent = `${beta_mm.toFixed(2)} mm`;
+
+        statTitle2.textContent = "Diffraction Envelope";
+        statAngularWidth.textContent = `${singleCentralWidth_mm.toFixed(2)} mm`;
+        statAngleDeg.textContent = `Central Envelope Width`;
+
+        statIntensityLaw.textContent = "Modulated Decay";
+        statIntensitySub.textContent = `Missing Order n = ±${missingOrder}`;
+
+        statComparison.textContent = "Modulated Peaks";
+        statRatio.textContent = `d/a = ${(state.slitDist / state.slitWidth).toFixed(1)}`;
+
+        teacherNoteContent.innerHTML = `
+          <strong>Combined Double Slit + Diffraction:</strong><br>
+          &bull; The interference fringes of width $\\beta = \\frac{\\lambda D}{d}$ sit <em>inside</em> the decaying single-slit diffraction envelope.<br>
+          &bull; <strong>Missing Orders:</strong> When an interference maximum coincides with a diffraction zero ($d/a = \\mathbf{${(state.slitDist/state.slitWidth).toFixed(1)}}$), that order completely vanishes from the screen!
+        `;
+
+        secondaryParamBox.classList.remove('opacity-40', 'pointer-events-none');
+        slitParamLabel.textContent = "Slit Separation (d)";
+        slitRangeSubtext.innerHTML = `<span>0.15 mm</span><span>0.50 mm</span><span>1.50 mm</span>`;
+
+      } else if (state.activeExp === 'lloyd') {
+        simStatusHeading.textContent = "LLOYD'S MIRROR EXPERIMENT";
+        simSubHeading.textContent = "PHASE INVERSION AT BOUNDARY (CENTRAL DARK FRINGE)";
+        centralIntensityDisplay.textContent = "Central Edge = PURE DARK (π Shift)";
+        modeRuleBadge.textContent = "Lloyd's Mirror: Stokes' phase reversal creates central dark fringe!";
+
+        statTitle1.textContent = "Fringe Width (β)";
+        statFringeWidth.textContent = `${beta_mm.toFixed(2)} mm`;
+        statBetaFormula.textContent = "β = λD / d (Virtual separation d)";
+        headerBetaBadge.textContent = `${beta_mm.toFixed(2)} mm`;
+
+        statTitle2.textContent = "Boundary Fringe";
+        statAngularWidth.textContent = "y = 0 is DARK";
+        statAngleDeg.textContent = "π Phase Jump (180°)";
+
+        statIntensityLaw.textContent = "Equal Brightness (Half Field)";
+        statIntensitySub.textContent = "Dark Center at Edge";
+
+        statComparison.textContent = "Central is Dark";
+        statRatio.textContent = "Inverted Phase";
+
+        teacherNoteContent.innerHTML = `
+          <strong>Lloyd's Mirror Secret:</strong><br>
+          &bull; Grazing incidence reflection from the mirror introduces an extra $\\pi$ phase shift ($\\lambda/2$ path difference).<br>
+          &bull; Therefore, at zero geometric path difference (the edge touching the mirror), waves interfere <strong>destructively</strong>, creating a <strong>dark central fringe</strong>!
+        `;
+
+        secondaryParamBox.classList.add('opacity-40', 'pointer-events-none');
+      }
+    }
+
+    // Slider Event Handlers
+    wavelengthSlider.addEventListener('input', (e) => {
+      state.wavelength = parseInt(e.target.value, 10);
+      computeOptics();
+    });
+
+    slitDistSlider.addEventListener('input', (e) => {
+      if (state.activeExp === 'single_diffraction') {
+        state.slitWidth = parseFloat(e.target.value);
+      } else {
+        state.slitDist = parseFloat(e.target.value);
+      }
+      computeOptics();
+    });
+
+    slitWidthSlider.addEventListener('input', (e) => {
+      state.slitWidth = parseFloat(e.target.value);
+      computeOptics();
+    });
+
+    screenDistSlider.addEventListener('input', (e) => {
+      state.screenDist = parseFloat(e.target.value);
+      computeOptics();
+    });
+
+    // Mode Switching
+    expTabBtns.forEach(tab => {
+      tab.addEventListener('click', () => {
+        expTabBtns.forEach(t => {
+          t.className = 'exp-tab-btn px-3 py-1.5 rounded-lg font-medium transition text-purple-200 bg-purple-950/60 border border-purple-800/50 hover:border-purple-600';
+        });
+        tab.className = 'exp-tab-btn px-3 py-1.5 rounded-lg font-bold transition bg-yellow-400 text-purple-950 shadow-sm';
+        state.activeExp = tab.dataset.exp;
+
+        if (state.activeExp === 'single_diffraction') {
+          slitDistSlider.min = "0.03";
+          slitDistSlider.max = "0.30";
+          slitDistSlider.step = "0.01";
+          slitDistSlider.value = state.slitWidth;
+        } else {
+          slitDistSlider.min = "0.15";
+          slitDistSlider.max = "1.50";
+          slitDistSlider.step = "0.01";
+          slitDistSlider.value = state.slitDist;
+        }
+
+        computeOptics();
+      });
+    });
+
+    togglePlayBtn.addEventListener('click', () => {
+      state.running = !state.running;
+      if (state.running) {
+        playIcon.className = 'fa-solid fa-pause';
+        playText.textContent = 'Pause Waves';
+      } else {
+        playIcon.className = 'fa-solid fa-play';
+        playText.textContent = 'Resume Waves';
+      }
+    });
+
+    resetLabBtn.addEventListener('click', () => {
+      state.wavelength = 550;
+      state.slitDist = 0.50;
+      state.slitWidth = 0.10;
+      state.screenDist = 1.00;
+
+      wavelengthSlider.value = 550;
+      slitDistSlider.value = 0.50;
+      slitWidthSlider.value = 0.10;
+      screenDistSlider.value = 1.00;
+
+      computeOptics();
+      showToast("Reset to Standard Parameters!");
+    });
+
+    snapToBrightBtn.addEventListener('click', () => {
+      const lambda_m = state.wavelength * 1e-9;
+      const d_m = state.slitDist * 1e-3;
+      const beta_mm = ((lambda_m * state.screenDist) / d_m) * 1e3;
+      showToast(`Order n = 1 Bright Fringe is located at y = +${beta_mm.toFixed(2)} mm!`);
+    });
+
+    toggleWavefronts.addEventListener('change', (e) => {
+      state.showWavefronts = e.target.checked;
+    });
+
+    toggleRayTracing.addEventListener('change', (e) => {
+      state.showRayTracing = e.target.checked;
+    });
+
+    // View Switching
+    viewLabBtn.addEventListener('click', () => {
+      quizModalView.classList.add('hidden');
+      viewLabBtn.className = 'px-3.5 py-1.5 rounded-lg font-bold transition bg-gradient-to-r from-yellow-400 to-amber-400 text-purple-950 shadow-md flex items-center gap-1.5';
+      viewQuizBtn.className = 'px-3.5 py-1.5 rounded-lg font-semibold transition text-purple-200 hover:text-white flex items-center gap-1.5';
+    });
+
+    viewQuizBtn.addEventListener('click', () => {
+      quizModalView.classList.remove('hidden');
+      viewQuizBtn.className = 'px-3.5 py-1.5 rounded-lg font-bold transition bg-gradient-to-r from-yellow-400 to-amber-400 text-purple-950 shadow-md flex items-center gap-1.5';
+      viewLabBtn.className = 'px-3.5 py-1.5 rounded-lg font-semibold transition text-purple-200 hover:text-white flex items-center gap-1.5';
+      renderQuizQuestion();
+    });
+
+    closeQuizModalBtn.addEventListener('click', () => {
+      quizModalView.classList.add('hidden');
+      viewLabBtn.className = 'px-3.5 py-1.5 rounded-lg font-bold transition bg-gradient-to-r from-yellow-400 to-amber-400 text-purple-950 shadow-md flex items-center gap-1.5';
+      viewQuizBtn.className = 'px-3.5 py-1.5 rounded-lg font-semibold transition text-purple-200 hover:text-white flex items-center gap-1.5';
+    });
+
+    function generateShareUrl() {
+      const url = new URL(window.location.href);
+      url.searchParams.set('exp', state.activeExp);
+      url.searchParams.set('lambda', state.wavelength);
+      url.searchParams.set('d', state.slitDist.toFixed(2));
+      url.searchParams.set('a', state.slitWidth.toFixed(2));
+      url.searchParams.set('D', state.screenDist.toFixed(2));
+      return url.toString();
+    }
+
+    shareLinkBtn.addEventListener('click', () => {
+      shareUrlInput.value = generateShareUrl();
+      shareModal.classList.remove('hidden');
+      shareUrlInput.select();
+    });
+
+    closeShareModal.addEventListener('click', () => {
+      shareModal.classList.add('hidden');
+    });
+
+    copyShareBtn.addEventListener('click', () => {
+      shareUrlInput.select();
+      shareUrlInput.setSelectionRange(0, 99999);
+      try {
+        const ok = document.execCommand('copy');
+        showToast(ok ? 'Mayur Sir\'s Link copied to clipboard!' : 'Please copy URL manually');
+      } catch (err) {
+        showToast('Please copy URL manually');
+      }
+    });
+
+    // Screen Hover Interactive Probe
+    canvas.addEventListener('mousemove', (e) => {
+      const rect = canvas.getBoundingClientRect();
+      const mouseX = e.clientX - rect.left;
+      const mouseY = e.clientY - rect.top;
+
+      const w = rect.width;
+      const screenX = w * 0.74;
+
+      if (mouseX >= screenX - 25 && mouseX <= w - 10) {
+        state.hoverScreenY = mouseY;
+        const waveAreaH = rect.height * 0.58;
+        const centerY = waveAreaH * 0.50;
+        const deltaPixels = mouseY - centerY;
+        
+        // Calibration: 120 pixels maps to 4.0 mm on the screen
+        const mmPerPixel = 4.0 / 120;
+        const delta_mm = deltaPixels * mmPerPixel;
+        const lambda_m = state.wavelength * 1e-9;
+        const d_m = state.slitDist * 1e-3;
+        const D_m = state.screenDist;
+        const pathDiff_m = (delta_mm * 1e-3 * d_m) / D_m;
+        const pathDiff_lambda = pathDiff_m / lambda_m;
+
+        let statusText = "";
+        if (state.activeExp === 'ydse') {
+          statusText = Math.abs(Math.round(pathDiff_lambda) - pathDiff_lambda) < 0.15 
+            ? `(Order n = ${Math.round(pathDiff_lambda)} Constructive Bright - Peak 4.00 I₀)` 
+            : `(Destructive / Minima - Uniform Width)`;
+        } else {
+          statusText = Math.abs(deltaPixels) < 18 ? "(Central Maximum - Peak Brightness)" : "(Secondary Peak - Rapidly Decaying)";
+        }
+
+        probeBannerText.textContent = `Screen Probe: y = ${delta_mm >= 0 ? '+' : ''}${delta_mm.toFixed(2)} mm | Δx = ${pathDiff_lambda.toFixed(2)} λ ${statusText}`;
+        probeBanner.classList.remove('opacity-0', 'pointer-events-none');
+        probeBanner.classList.add('opacity-100');
+      } else {
+        state.hoverScreenY = null;
+        probeBanner.classList.add('opacity-0', 'pointer-events-none');
+        probeBanner.classList.remove('opacity-100');
+      }
+    });
+
+    canvas.addEventListener('mouseleave', () => {
+      state.hoverScreenY = null;
+      probeBanner.classList.add('opacity-0', 'pointer-events-none');
+      probeBanner.classList.remove('opacity-100');
+    });
+
+    let lastTime = performance.now();
+
+    function simLoop(timestamp) {
+      const dt = Math.min(0.04, (timestamp - lastTime) / 1000);
+      lastTime = timestamp;
+
+      const rect = container.getBoundingClientRect();
+      const w = rect.width;
+      const h = rect.height;
+
+      ctx.clearRect(0, 0, w, h);
+
+      if (state.running) {
+        state.wavePhase += dt * 4.5;
+      }
+
+      // Upper 58%: Slits, Wavefield, and Observation Screen
+      const waveAreaH = h * 0.58;
+      renderWavefield(ctx, w, waveAreaH);
+
+      // Lower 42%: Mathematical Intensity Distribution Profile Curve
+      const graphY = waveAreaH;
+      const graphH = h - waveAreaH;
+      renderIntensityGraph(ctx, w, graphY, graphH);
+
+      requestAnimationFrame(simLoop);
+    }
+
+    function renderWavefield(ctx, w, h) {
+      ctx.save();
+
+      // Optical bench background
+      ctx.fillStyle = '#060010';
+      ctx.fillRect(0, 0, w, h);
+
+      const slitWallX = Math.round(w * 0.22);
+      const screenX = Math.round(w * 0.74);
+      const centerY = Math.round(h * 0.50);
+      const colorInfo = nmToColor(state.wavelength);
+
+      // Physical optics parameters
+      const lambda_m = state.wavelength * 1e-9;
+      const d_m = Math.max(0.05, state.slitDist) * 1e-3;
+      const a_m = Math.max(0.01, state.slitWidth) * 1e-3;
+      const D_m = Math.max(0.2, state.screenDist);
+
+      // Slit separation mapped visually
+      const visualSlitD = Math.max(26, Math.min(74, state.slitDist * 50));
+      const s1Y = centerY - visualSlitD / 2;
+      const s2Y = centerY + visualSlitD / 2;
+
+      // 1. Incident Laser Beam from Left
+      const gradBeam = ctx.createLinearGradient(0, centerY, slitWallX, centerY);
+      gradBeam.addColorStop(0, colorInfo.rgba(0.08));
+      gradBeam.addColorStop(0.7, colorInfo.rgba(0.35));
+      gradBeam.addColorStop(1, colorInfo.rgba(0.75));
+
+      ctx.fillStyle = gradBeam;
+      ctx.fillRect(0, centerY - visualSlitD * 1.2, slitWallX - 4, visualSlitD * 2.4);
+
+      // Coherent plane wavefronts
+      ctx.strokeStyle = colorInfo.rgba(0.85);
+      ctx.lineWidth = 1.8;
+      const planeWl = 16;
+      for (let px = (state.wavePhase * 9) % planeWl; px < slitWallX - 6; px += planeWl) {
+        ctx.beginPath();
+        ctx.moveTo(px, centerY - visualSlitD * 1.2);
+        ctx.lineTo(px, centerY + visualSlitD * 1.2);
+        ctx.stroke();
+      }
+
+      ctx.fillStyle = '#facc15';
+      ctx.font = 'bold 9px monospace';
+      ctx.textAlign = 'left';
+      ctx.fillText(`→ Monochromatic Waves (λ = ${state.wavelength}nm)`, 10, centerY - visualSlitD * 1.2 - 6);
+
+      // 2. Central Optical Axis Line
+      ctx.strokeStyle = 'rgba(250, 204, 21, 0.35)';
+      ctx.lineWidth = 1;
+      ctx.setLineDash([4, 4]);
+      ctx.beginPath();
+      ctx.moveTo(slitWallX, centerY);
+      ctx.lineTo(screenX, centerY);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      ctx.fillStyle = '#facc15';
+      ctx.font = '9px monospace';
+      ctx.textAlign = 'center';
+      ctx.fillText('Central Axis (y=0, Δx=0)', (slitWallX + screenX) / 2, centerY - 6);
+
+      // 3. Propagating Huygens Wavelets
+      if (state.showWavefronts) {
+        ctx.save();
+        ctx.beginPath();
+        ctx.rect(slitWallX + 6, 0, screenX - slitWallX - 6, h);
+        ctx.clip();
+
+        const maxRadius = screenX - slitWallX + 60;
+        const lambdaPix = 16;
+
+        for (let r = (state.wavePhase * 6.5) % lambdaPix; r < maxRadius; r += lambdaPix) {
+          const alpha = Math.max(0.04, 0.35 * (1 - r / maxRadius));
+          ctx.strokeStyle = colorInfo.rgba(alpha);
+          ctx.lineWidth = 1.3;
+
+          if (state.activeExp === 'single_diffraction') {
+            ctx.beginPath();
+            ctx.arc(slitWallX + 5, centerY, r, -Math.PI / 2, Math.PI / 2);
+            ctx.stroke();
+          } else {
+            ctx.beginPath();
+            ctx.arc(slitWallX + 5, s1Y, r, -Math.PI / 2, Math.PI / 2);
+            ctx.stroke();
+
+            if (state.activeExp !== 'lloyd') {
+              ctx.beginPath();
+              ctx.arc(slitWallX + 5, s2Y, r, -Math.PI / 2, Math.PI / 2);
+              ctx.stroke();
+            }
+          }
+        }
+
+        // Lloyd's Mirror boundary
+        if (state.activeExp === 'lloyd') {
+          const mirrorY = s2Y;
+          ctx.fillStyle = '#38bdf8';
+          ctx.fillRect(slitWallX, mirrorY, screenX - slitWallX, 5);
+          ctx.strokeStyle = '#ffffff';
+          ctx.lineWidth = 1.5;
+          ctx.strokeRect(slitWallX, mirrorY, screenX - slitWallX, 5);
+
+          ctx.fillStyle = '#38bdf8';
+          ctx.font = 'bold 9px monospace';
+          ctx.textAlign = 'center';
+          ctx.fillText("LLOYD'S MIRROR (π Phase Jump at Boundary)", (slitWallX + screenX) / 2, mirrorY + 16);
+        }
+
+        // Ray Tracing
+        if (state.showRayTracing) {
+          const targetProbeY = state.hoverScreenY !== null ? state.hoverScreenY : centerY;
+          ctx.strokeStyle = 'rgba(250, 204, 21, 0.6)';
+          ctx.lineWidth = 1.2;
+          ctx.setLineDash([3, 3]);
+
+          if (state.activeExp === 'single_diffraction') {
+            ctx.beginPath();
+            ctx.moveTo(slitWallX + 5, centerY);
+            ctx.lineTo(screenX, targetProbeY);
+            ctx.stroke();
+          } else {
+            ctx.beginPath();
+            ctx.moveTo(slitWallX + 5, s1Y);
+            ctx.lineTo(screenX, targetProbeY);
+            ctx.stroke();
+
+            if (state.activeExp !== 'lloyd') {
+              ctx.beginPath();
+              ctx.moveTo(slitWallX + 5, s2Y);
+              ctx.lineTo(screenX, targetProbeY);
+              ctx.stroke();
+            }
+          }
+          ctx.setLineDash([]);
+        }
+
+        ctx.restore();
+      }
+
+      // 4. Physical Slit Barrier Wall
+      const wallW = 10;
+      const slitOpening = state.activeExp === 'single_diffraction' ? 14 : 6;
+
+      ctx.fillStyle = '#1e0b3c';
+      ctx.strokeStyle = '#facc15';
+      ctx.lineWidth = 2;
+
+      if (state.activeExp === 'single_diffraction') {
+        ctx.fillRect(slitWallX - wallW / 2, 0, wallW, centerY - slitOpening / 2);
+        ctx.strokeRect(slitWallX - wallW / 2, 0, wallW, centerY - slitOpening / 2);
+
+        ctx.fillRect(slitWallX - wallW / 2, centerY + slitOpening / 2, wallW, h - (centerY + slitOpening / 2));
+        ctx.strokeRect(slitWallX - wallW / 2, centerY + slitOpening / 2, wallW, h - (centerY + slitOpening / 2));
+
+        ctx.fillStyle = '#facc15';
+        ctx.font = 'bold 10px monospace';
+        ctx.textAlign = 'right';
+        ctx.fillText(`Aperture (a=${state.slitWidth.toFixed(2)}mm)`, slitWallX - 10, centerY + 3);
+      } else {
+        ctx.fillRect(slitWallX - wallW / 2, 0, wallW, s1Y - slitOpening / 2);
+        ctx.strokeRect(slitWallX - wallW / 2, 0, wallW, s1Y - slitOpening / 2);
+
+        if (state.activeExp !== 'lloyd') {
+          const midTop = s1Y + slitOpening / 2;
+          const midH = (s2Y - slitOpening / 2) - midTop;
+          if (midH > 0) {
+            ctx.fillRect(slitWallX - wallW / 2, midTop, wallW, midH);
+            ctx.strokeRect(slitWallX - wallW / 2, midTop, wallW, midH);
+          }
+        }
+
+        const botTop = s2Y + slitOpening / 2;
+        ctx.fillRect(slitWallX - wallW / 2, botTop, wallW, h - botTop);
+        ctx.strokeRect(slitWallX - wallW / 2, botTop, wallW, h - botTop);
+
+        ctx.fillStyle = '#facc15';
+        ctx.font = 'bold 10px monospace';
+        ctx.textAlign = 'right';
+        ctx.fillText('S₁', slitWallX - 10, s1Y + 3);
+        if (state.activeExp !== 'lloyd') {
+          ctx.fillText('S₂', slitWallX - 10, s2Y + 3);
+        }
+
+        // Slit distance bracket
+        ctx.strokeStyle = '#facc15';
+        ctx.lineWidth = 1.4;
+        ctx.beginPath();
+        ctx.moveTo(slitWallX - 22, s1Y);
+        ctx.lineTo(slitWallX - 22, s2Y);
+        ctx.moveTo(slitWallX - 26, s1Y);
+        ctx.lineTo(slitWallX - 18, s1Y);
+        ctx.moveTo(slitWallX - 26, s2Y);
+        ctx.lineTo(slitWallX - 18, s2Y);
+        ctx.stroke();
+
+        ctx.save();
+        ctx.translate(slitWallX - 26, centerY);
+        ctx.rotate(-Math.PI / 2);
+        ctx.font = 'bold 9px monospace';
+        ctx.textAlign = 'center';
+        ctx.fillText(`d=${state.slitDist.toFixed(2)}mm`, 0, -5);
+        ctx.restore();
+      }
+
+      ctx.fillStyle = '#ffffff';
+      ctx.font = 'bold 9px monospace';
+      ctx.textAlign = 'center';
+      ctx.fillText(state.activeExp === 'single_diffraction' ? 'SINGLE SLIT' : 'DOUBLE SLIT', slitWallX, 16);
+
+      // 5. PHYSICAL OBSERVATION SCREEN
+      const screenW = 24;
+      ctx.fillStyle = '#14062b';
+      ctx.fillRect(screenX, 0, screenW, h);
+      ctx.strokeStyle = '#a855f7';
+      ctx.lineWidth = 2.5;
+      ctx.strokeRect(screenX, 0, screenW, h);
+
+      // 6. DYNAMIC FRINGE RENDERING ON SCREEN SURFACE
+      // Spatial scale: 120 pixels on canvas corresponds to 4.0 mm in the real plane.
+      // Changing λ, d, or D immediately updates y_m, phase difference, and screen brightness!
+      const mmPerPixel = 4.0 / 120;
+
+      for (let sy = 0; sy < h; sy += 1) {
+        const deltaPixels = sy - centerY;
+        const y_mm = deltaPixels * mmPerPixel;
+        const y_m = y_mm * 1e-3;
+
+        let intensityOnScreen = 0;
+
+        if (state.activeExp === 'ydse') {
+          // Pure Interference: I = I_max * cos^2(delta / 2)
+          // delta = 2*pi*d*y / (lambda * D)
+          const delta = (2 * Math.PI * d_m * y_m) / (lambda_m * D_m);
+          // Peak intensity is strictly uniform 1.0 everywhere across the screen!
+          intensityOnScreen = Math.pow(Math.cos(delta / 2), 2);
+
+        } else if (state.activeExp === 'single_diffraction') {
+          // Single Slit Diffraction: [sin(beta) / beta]^2
+          // beta = pi * a * y / (lambda * D)
+          // Central max width is double (2*lambda*D/a); secondary peaks decay sharply (1 : 1/22 : 1/61)
+          const beta = (Math.PI * a_m * y_m) / (lambda_m * D_m);
+          intensityOnScreen = Math.abs(beta) < 1e-4 ? 1.0 : Math.pow(Math.sin(beta) / beta, 2);
+
+        } else if (state.activeExp === 'envelope') {
+          // Double slit modulated by diffraction envelope
+          const delta = (2 * Math.PI * d_m * y_m) / (lambda_m * D_m);
+          const cosTerm = Math.pow(Math.cos(delta / 2), 2);
+          const beta = (Math.PI * a_m * y_m) / (lambda_m * D_m);
+          const diffEnvelope = Math.abs(beta) < 1e-4 ? 1.0 : Math.pow(Math.sin(beta) / beta, 2);
+          intensityOnScreen = cosTerm * diffEnvelope;
+
+        } else if (state.activeExp === 'lloyd') {
+          // Lloyd's mirror: phase inversion (pi) at mirror edge
+          const delta = (2 * Math.PI * d_m * y_m) / (lambda_m * D_m) + Math.PI;
+          intensityOnScreen = Math.pow(Math.cos(delta / 2), 2);
+        }
+
+        ctx.fillStyle = colorInfo.rgba(Math.max(0.01, intensityOnScreen * 0.98));
+        ctx.fillRect(screenX + 2, sy, screenW - 4, 1);
+      }
+
+      // Screen Header & Labels
+      ctx.fillStyle = '#ffffff';
+      ctx.font = 'bold 10px monospace';
+      ctx.textAlign = 'left';
+      ctx.fillText('SCREEN', screenX + screenW + 8, 18);
+
+      const beta_mm = ((lambda_m * D_m) / d_m) * 1e3;
+
+      ctx.fillStyle = '#facc15';
+      ctx.font = '9px monospace';
+      ctx.fillText(`D = ${state.screenDist.toFixed(2)} m`, screenX + screenW + 8, 32);
+
+      if (state.activeExp === 'ydse') {
+        ctx.fillText(`β = ${beta_mm.toFixed(2)} mm (Constant)`, screenX + screenW + 8, 46);
+        ctx.fillText(`I_max = 4I₀ (Uniform)`, screenX + screenW + 8, 60);
+      } else if (state.activeExp === 'single_diffraction') {
+        const w0 = (2 * lambda_m * D_m / a_m) * 1e3;
+        ctx.fillText(`Central 2β₀ = ${w0.toFixed(2)} mm`, screenX + screenW + 8, 46);
+        ctx.fillText(`Sec Peak: ~4.7%`, screenX + screenW + 8, 60);
+      } else {
+        ctx.fillText(`β = ${beta_mm.toFixed(2)} mm`, screenX + screenW + 8, 46);
+        ctx.fillText(`Decaying Envelope`, screenX + screenW + 8, 60);
+      }
+
+      // Central Axis Screen Marker
+      ctx.strokeStyle = '#ffffff';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(screenX - 4, centerY);
+      ctx.lineTo(screenX + screenW + 4, centerY);
+      ctx.stroke();
+
+      ctx.fillStyle = '#ffffff';
+      ctx.font = 'bold 9px monospace';
+      ctx.fillText(state.activeExp === 'lloyd' ? 'n = 0 (Dark Edge)' : 'n = 0 (Center)', screenX + screenW + 8, centerY + 3);
+
+      // Interactive Probe Line
+      if (state.hoverScreenY !== null && state.hoverScreenY < h) {
+        ctx.strokeStyle = '#facc15';
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.moveTo(screenX - 10, state.hoverScreenY);
+        ctx.lineTo(screenX + screenW + 10, state.hoverScreenY);
+        ctx.stroke();
+
+        ctx.fillStyle = '#facc15';
+        ctx.beginPath();
+        ctx.arc(screenX + screenW / 2, state.hoverScreenY, 4, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      ctx.restore();
+    }
+
+    function renderIntensityGraph(ctx, w, graphY, graphH) {
+      ctx.save();
+      ctx.translate(0, graphY);
+
+      // Background
+      ctx.fillStyle = '#060010';
+      ctx.fillRect(0, 0, w, graphH);
+      ctx.strokeStyle = '#4c1d95';
+      ctx.lineWidth = 1.5;
+      ctx.strokeRect(0, 0, w, graphH);
+
+      const padLeft = 65;
+      const padRight = 30;
+      const padTop = 24;
+      const padBottom = 26;
+
+      const plotW = w - padLeft - padRight;
+      const plotH = graphH - padTop - padBottom;
+      const centerY = padTop + plotH / 2;
+      const colorInfo = nmToColor(state.wavelength);
+
+      // Gridlines
+      ctx.strokeStyle = '#1e0c40';
+      ctx.lineWidth = 1;
+      for (let gy = padTop; gy <= padTop + plotH; gy += plotH / 4) {
+        ctx.beginPath(); ctx.moveTo(padLeft, gy); ctx.lineTo(padLeft + plotW, gy); ctx.stroke();
+      }
+
+      // Baseline
+      ctx.strokeStyle = '#6b21a8';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(padLeft, padTop + plotH);
+      ctx.lineTo(padLeft + plotW, padTop + plotH);
+      ctx.stroke();
+
+      // Titles
+      ctx.fillStyle = '#facc15';
+      ctx.font = 'bold 10px monospace';
+      ctx.textAlign = 'left';
+
+      if (state.activeExp === 'ydse') {
+        ctx.fillText('↑ Intensity I (All Maxima Equal Height = 4 I₀ & Equal Width β)', padLeft, padTop - 8);
+      } else if (state.activeExp === 'single_diffraction') {
+        ctx.fillText('↑ Intensity I (Central Max Twice Width & Rapid Decay: 1 : 1/22 : 1/61)', padLeft, padTop - 8);
+      } else {
+        ctx.fillText('↑ Intensity I (Double Slit Fringes Modulated by Diffraction Envelope)', padLeft, padTop - 8);
+      }
+
+      ctx.textAlign = 'right';
+      ctx.fillText('Position on Screen y (mm) →', padLeft + plotW, padTop + plotH + 20);
+
+      // Y-Axis Scale
+      ctx.font = '9px monospace';
+      ctx.fillStyle = '#c084fc';
+      ctx.textAlign = 'right';
+      ctx.fillText('4 I₀ (I_max)', padLeft - 8, padTop + 5);
+      ctx.fillText('2 I₀', padLeft - 8, centerY + 3);
+      ctx.fillText('0', padLeft - 8, padTop + plotH);
+
+      const lambda_m = state.wavelength * 1e-9;
+      const d_m = Math.max(0.05, state.slitDist) * 1e-3;
+      const a_m = Math.max(0.01, state.slitWidth) * 1e-3;
+      const D_m = Math.max(0.2, state.screenDist);
+
+      const beta_mm = ((lambda_m * D_m) / d_m) * 1e3;
+      // Fixed physical window of ±4.0 mm on the screen
+      const maxRange_mm = 4.0;
+
+      const mapX = (y_mm) => padLeft + plotW / 2 + (y_mm / maxRange_mm) * (plotW / 2);
+      const mapI = (intVal) => (padTop + plotH) - (intVal / 4.0) * plotH;
+
+      // X-axis Ticks for physical orders
+      const maxOrder = Math.floor(maxRange_mm / beta_mm);
+      for (let n = -maxOrder; n <= maxOrder; n++) {
+        const yPos_mm = n * beta_mm;
+        const xPos = mapX(yPos_mm);
+        if (xPos >= padLeft && xPos <= padLeft + plotW) {
+          ctx.strokeStyle = '#3b1774';
+          ctx.beginPath(); ctx.moveTo(xPos, padTop); ctx.lineTo(xPos, padTop + plotH); ctx.stroke();
+          ctx.fillStyle = n === 0 ? '#facc15' : '#c084fc';
+          ctx.font = '9px monospace';
+          ctx.textAlign = 'center';
+          ctx.fillText(n === 0 ? 'y=0' : `${n > 0 ? '+' : ''}${n}β`, xPos, padTop + plotH + 14);
+        }
+      }
+
+      const numPoints = 360;
+
+      // In Envelope mode: Draw dashed single slit diffraction envelope
+      if (state.activeExp === 'envelope') {
+        ctx.strokeStyle = 'rgba(250, 204, 21, 0.45)';
+        ctx.lineWidth = 1.4;
+        ctx.setLineDash([4, 4]);
+        ctx.beginPath();
+
+        for (let i = 0; i <= numPoints; i++) {
+          const y_mm = -maxRange_mm + (i / numPoints) * (2 * maxRange_mm);
+          const y_m = y_mm * 1e-3;
+          const xPix = mapX(y_mm);
+          const beta = (Math.PI * a_m * y_m) / (lambda_m * D_m);
+          const diffEnvelope = Math.abs(beta) < 1e-4 ? 1.0 : Math.pow(Math.sin(beta) / beta, 2);
+          const yPix = mapI(4.0 * diffEnvelope);
+
+          if (i === 0) ctx.moveTo(xPix, yPix);
+          else ctx.lineTo(xPix, yPix);
+        }
+        ctx.stroke();
+        ctx.setLineDash([]);
+      }
+
+      // Plot Intensity Profile Curve
+      ctx.strokeStyle = colorInfo.rgb;
+      ctx.lineWidth = 2.4;
+      ctx.beginPath();
+
+      for (let i = 0; i <= numPoints; i++) {
+        const y_mm = -maxRange_mm + (i / numPoints) * (2 * maxRange_mm);
+        const y_m = y_mm * 1e-3;
+        const xPix = mapX(y_mm);
+        let intensityVal = 0;
+
+        if (state.activeExp === 'ydse') {
+          // PURE YDSE: All maxima have IDENTICAL peak intensity 4.00 I0 and equal width beta!
+          const delta = (2 * Math.PI * d_m * y_m) / (lambda_m * D_m);
+          intensityVal = 4.0 * Math.pow(Math.cos(delta / 2), 2);
+
+        } else if (state.activeExp === 'single_diffraction') {
+          // SINGLE SLIT DIFFRACTION: Central max is twice width & secondary peaks decay sharply!
+          const beta = (Math.PI * a_m * y_m) / (lambda_m * D_m);
+          const diffTerm = Math.abs(beta) < 1e-4 ? 1.0 : Math.pow(Math.sin(beta) / beta, 2);
+          intensityVal = 4.0 * diffTerm;
+
+        } else if (state.activeExp === 'envelope') {
+          // Double slit modulated by diffraction envelope
+          const delta = (2 * Math.PI * d_m * y_m) / (lambda_m * D_m);
+          const cosTerm = Math.pow(Math.cos(delta / 2), 2);
+          const beta = (Math.PI * a_m * y_m) / (lambda_m * D_m);
+          const diffEnvelope = Math.abs(beta) < 1e-4 ? 1.0 : Math.pow(Math.sin(beta) / beta, 2);
+          intensityVal = 4.0 * cosTerm * diffEnvelope;
+
+        } else if (state.activeExp === 'lloyd') {
+          // Lloyd's mirror: phase inversion at mirror edge
+          const delta = (2 * Math.PI * d_m * y_m) / (lambda_m * D_m) + Math.PI;
+          intensityVal = 4.0 * Math.pow(Math.cos(delta / 2), 2);
+        }
+
+        const yPix = mapI(intensityVal);
+        if (i === 0) ctx.moveTo(xPix, yPix);
+        else ctx.lineTo(xPix, yPix);
+      }
+      ctx.stroke();
+
+      // Shaded fill under curve
+      ctx.lineTo(padLeft + plotW, padTop + plotH);
+      ctx.lineTo(padLeft, padTop + plotH);
+      ctx.closePath();
+      ctx.fillStyle = colorInfo.rgba(0.18);
+      ctx.fill();
+
+      // Formula Badge
+      ctx.fillStyle = '#4ade80';
+      ctx.font = 'bold 10px monospace';
+      ctx.textAlign = 'right';
+
+      if (state.activeExp === 'ydse') {
+        ctx.fillText('Pure YDSE: I(y) = 4 I₀ • cos²(πdy / λD) [Equal Width & Uniform Peak 4I₀]', padLeft + plotW, padTop + 14);
+      } else if (state.activeExp === 'single_diffraction') {
+        ctx.fillText('Diffraction: I(y) = I₀ • [sin(πay/λD) / (πay/λD)]² [Central Width = 2β₀, Rapid Decay]', padLeft + plotW, padTop + 14);
+      } else {
+        ctx.fillText('Modulated: I(y) = 4 I₀ • [sin(πay/λD) / (πay/λD)]² • cos²(πdy/λD)', padLeft + plotW, padTop + 14);
+      }
+
+      ctx.restore();
+    }
+
+    function renderQuizQuestion() {
+      if (state.quiz.showScorecard) {
+        renderQuizScorecard();
+        return;
+      }
+
+      const qIdx = state.quiz.currentIndex;
+      const q = QUIZ_QUESTIONS[qIdx];
+      const userAnswer = state.quiz.answers[qIdx];
+      const isAnswered = userAnswer !== undefined;
+
+      let html = `
+        <div class="flex items-center justify-between text-xs font-mono">
+          <span class="text-yellow-300 font-bold">QUESTION ${qIdx + 1} OF ${QUIZ_QUESTIONS.length}</span>
+          <span class="text-purple-300 bg-purple-900/60 px-2.5 py-1 rounded-md border border-purple-700/50">[${q.category.toUpperCase()}]</span>
+        </div>
+
+        <div class="w-full h-2 bg-purple-950 rounded-full overflow-hidden border border-purple-800">
+          <div class="h-full bg-gradient-to-r from-yellow-400 to-amber-300 transition-all duration-300" style="width: ${((qIdx + 1) / QUIZ_QUESTIONS.length) * 100}%;"></div>
+        </div>
+
+        <div class="bg-[#0b031c] p-4 rounded-xl border border-purple-700/60 text-white font-medium text-sm sm:text-base leading-snug">
+          ${q.question}
+        </div>
+
+        <div class="grid grid-cols-1 gap-2.5">
+      `;
+
+      q.options.forEach((optText, optIdx) => {
+        let optClass = 'bg-[#14062c] border-purple-800/80 text-purple-200 hover:border-yellow-400 hover:text-white';
+        let badgeClass = 'bg-purple-900 text-purple-200';
+
+        if (isAnswered) {
+          if (optIdx === q.correct) {
+            optClass = 'bg-green-950/40 border-green-500 text-green-200 font-bold';
+            badgeClass = 'bg-green-600 text-white';
+          } else if (optIdx === userAnswer) {
+            optClass = 'bg-red-950/40 border-red-500 text-red-200 font-bold';
+            badgeClass = 'bg-red-600 text-white';
+          }
+        }
+
+        const letter = String.fromCharCode(65 + optIdx);
+        html += `
+          <button class="quiz-option-btn w-full p-3 rounded-xl border text-left transition flex items-center gap-3 ${optClass}" data-opt="${optIdx}">
+            <span class="w-7 h-7 rounded-lg flex items-center justify-center font-bold text-xs shrink-0 ${badgeClass}">${letter}</span>
+            <span class="text-xs sm:text-sm">${optText}</span>
+          </button>
+        `;
+      });
+
+      html += `</div>`;
+
+      if (isAnswered) {
+        const isCorrect = userAnswer === q.correct;
+        html += `
+          <div class="bg-[#1b0a3c] p-4 rounded-xl border ${isCorrect ? 'border-green-500/80' : 'border-yellow-400/80'} flex flex-col gap-1.5 animate-fadeIn">
+            <div class="flex items-center gap-2 text-xs font-bold ${isCorrect ? 'text-green-400' : 'text-yellow-300'}">
+              <i class="fa-solid ${isCorrect ? 'fa-circle-check' : 'fa-circle-xmark'}"></i>
+              <span>${isCorrect ? 'Correct! Mayur Sir\'s Pedagogical Breakdown:' : 'Incorrect. Mayur Sir\'s Conceptual Breakdown:'}</span>
+            </div>
+            <p class="text-xs text-purple-100 leading-relaxed font-normal">
+              ${q.explanation}
+            </p>
+          </div>
+        `;
+      }
+
+      html += `
+        <div class="flex items-center justify-between pt-2 border-t border-purple-800/80 flex-wrap gap-2">
+          <button id="quizPrevBtn" class="px-4 py-2 rounded-xl bg-purple-900/60 hover:bg-purple-800 text-purple-200 border border-purple-700/60 text-xs font-bold transition flex items-center gap-1.5" ${qIdx === 0 ? 'disabled opacity-50' : ''}>
+            <i class="fa-solid fa-arrow-left"></i> Previous
+          </button>
+
+          <span class="text-xs font-mono text-purple-300">
+            Score: <strong class="text-yellow-300">${state.quiz.score}</strong> / ${QUIZ_QUESTIONS.length}
+          </span>
+
+          <button id="quizNextBtn" class="px-5 py-2 rounded-xl bg-yellow-400 hover:bg-yellow-300 text-purple-950 text-xs font-extrabold transition shadow flex items-center gap-1.5">
+            ${qIdx === QUIZ_QUESTIONS.length - 1 ? 'View Final Scorecard →' : 'Next Question →'}
+          </button>
+        </div>
+      `;
+
+      quizInteractiveArea.innerHTML = html;
+
+      document.querySelectorAll('.quiz-option-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          if (state.quiz.answers[qIdx] === undefined) {
+            const chosen = parseInt(btn.dataset.opt, 10);
+            state.quiz.answers[qIdx] = chosen;
+            if (chosen === q.correct) {
+              state.quiz.score++;
+            }
+            renderQuizQuestion();
+          }
+        });
+      });
+
+      document.getElementById('quizPrevBtn')?.addEventListener('click', () => {
+        if (state.quiz.currentIndex > 0) {
+          state.quiz.currentIndex--;
+          renderQuizQuestion();
+        }
+      });
+
+      document.getElementById('quizNextBtn')?.addEventListener('click', () => {
+        if (state.quiz.currentIndex < QUIZ_QUESTIONS.length - 1) {
+          state.quiz.currentIndex++;
+          renderQuizQuestion();
+        } else {
+          state.quiz.showScorecard = true;
+          renderQuizScorecard();
+        }
+      });
+    }
+
+    function renderQuizScorecard() {
+      const total = QUIZ_QUESTIONS.length;
+      const score = state.quiz.score;
+      const pct = Math.round((score / total) * 100);
+
+      const categories = ["YDSE Fundamentals", "Diffraction vs Interference", "Lloyd's Mirror", "Condition for Interference", "Energy Conservation"];
+
+      let catHtml = '';
+      categories.forEach(cat => {
+        const catQuestions = QUIZ_QUESTIONS.filter(q => q.category.includes(cat) || cat.includes(q.category));
+        const catTotal = catQuestions.length;
+        let catCorrect = 0;
+        catQuestions.forEach(q => {
+          if (state.quiz.answers[q.id - 1] === q.correct) catCorrect++;
+        });
+        const catPct = catTotal > 0 ? Math.round((catCorrect / catTotal) * 100) : 0;
+
+        catHtml += `
+          <div class="flex items-center justify-between text-xs font-mono">
+            <span class="text-purple-200 w-48 truncate">${cat}</span>
+            <div class="flex-1 mx-3 h-2 bg-purple-950 rounded-full overflow-hidden border border-purple-800">
+              <div class="h-full bg-yellow-400" style="width: ${catPct}%;"></div>
+            </div>
+            <span class="text-yellow-300 font-bold">${catCorrect}/${catTotal} (${catPct}%)</span>
+          </div>
+        `;
+      });
+
+      let teacherFeedback = "";
+      if (pct >= 90) teacherFeedback = "Outstanding Wave Optics Mastery! You clearly grasp the fundamental difference: pure YDSE has equal fringe width & brightness, whereas diffraction has double-width central max with decaying intensity!";
+      else if (pct >= 70) teacherFeedback = "Strong Performance! Review single-slit diffraction central width (2λD/a) and missing orders to push for 100%.";
+      else if (pct >= 50) teacherFeedback = "Good effort! Switch between Mode 1 (Pure YDSE) and Mode 2 (Diffraction) above to compare the differences visually.";
+      else teacherFeedback = "Keep practicing! Review Huygens' wavelets, fringe width formulas, and retake the assessment.";
+
+      quizInteractiveArea.innerHTML = `
+        <div class="flex flex-col items-center gap-4 text-center py-3">
+          <div class="w-20 h-20 rounded-full bg-yellow-400 text-purple-950 flex items-center justify-center font-black text-3xl shadow-xl shadow-yellow-400/30">
+            ${score}
+          </div>
+
+          <div>
+            <h3 class="text-xl font-bold text-white">Wave Optics Mastery: ${pct}%</h3>
+            <p class="text-xs text-yellow-300 font-mono mt-1">${score} of ${total} Questions Correct</p>
+          </div>
+
+          <div class="bg-[#1b0a3c] p-3.5 rounded-xl border border-yellow-400/40 text-xs text-purple-100 max-w-lg leading-relaxed">
+            ${teacherFeedback}
+          </div>
+
+          <div class="w-full bg-[#0a0219] p-4 rounded-xl border border-purple-800/80 flex flex-col gap-2.5 text-left max-w-lg">
+            <span class="text-xs font-bold uppercase tracking-wider text-yellow-300 font-mono mb-1">Topic-by-Topic Breakdown:</span>
+            ${catHtml}
+          </div>
+
+          <div class="flex items-center gap-3 pt-2">
+            <button id="retakeQuizBtn" class="px-5 py-2.5 rounded-xl bg-yellow-400 hover:bg-yellow-300 text-purple-950 font-extrabold text-xs transition shadow-lg flex items-center gap-2">
+              <i class="fa-solid fa-arrow-rotate-left"></i> Retake Assessment
+            </button>
+            <button id="reviewQuestionsBtn" class="px-5 py-2.5 rounded-xl bg-purple-900/80 hover:bg-purple-800 text-purple-200 border border-purple-700/60 text-xs font-bold transition flex items-center gap-2">
+              <i class="fa-solid fa-list-check"></i> Review Explanations
+            </button>
+          </div>
+        </div>
+      `;
+
+      document.getElementById('retakeQuizBtn')?.addEventListener('click', () => {
+        state.quiz.currentIndex = 0;
+        state.quiz.answers = [];
+        state.quiz.score = 0;
+        state.quiz.showScorecard = false;
+        renderQuizQuestion();
+      });
+
+      document.getElementById('reviewQuestionsBtn')?.addEventListener('click', () => {
+        state.quiz.currentIndex = 0;
+        state.quiz.showScorecard = false;
+        renderQuizQuestion();
+      });
+    }
+
+    function parsePresetParameters() {
+      try {
+        const params = new URLSearchParams(window.location.search);
+        if (params.get('exp')) state.activeExp = params.get('exp');
+        if (params.get('lambda')) {
+          state.wavelength = parseInt(params.get('lambda'), 10) || 550;
+          wavelengthSlider.value = state.wavelength;
+        }
+        if (params.get('d')) {
+          state.slitDist = parseFloat(params.get('d')) || 0.50;
+          slitDistSlider.value = state.slitDist;
+        }
+        if (params.get('a')) {
+          state.slitWidth = parseFloat(params.get('a')) || 0.10;
+          slitWidthSlider.value = state.slitWidth;
+        }
+        if (params.get('D')) {
+          state.screenDist = parseFloat(params.get('D')) || 1.00;
+          screenDistSlider.value = state.screenDist;
+        }
+
+        expTabBtns.forEach(b => {
+          if (b.dataset.exp === state.activeExp) {
+            b.className = 'exp-tab-btn px-3 py-1.5 rounded-lg font-bold transition bg-yellow-400 text-purple-950 shadow-sm';
+          } else {
+            b.className = 'exp-tab-btn px-3 py-1.5 rounded-lg font-medium transition text-purple-200 bg-purple-950/60 border border-purple-800/50 hover:border-purple-600';
+          }
+        });
+      } catch (e) {
+        console.debug('Failed to parse URL preset', e);
+      }
+    }
+
+    // Launch Application
+    window.onload = function () {
+      resizeCanvas();
+      parsePresetParameters();
+      computeOptics();
+      requestAnimationFrame(simLoop);
+    };
+  </script>
+</body>
+</html>
